@@ -14,15 +14,18 @@
 void helloWorld() {
     printf("Hello World !");
 }
-
 void dimension (char *source_path){
-    int width, height, chanel_count;
-    unsigned char *data;
-    if(read_image_data(source_path, &data, &width, &height, &chanel_count)){
-        printf ("dimension: %d, %d", width, height);
-    }
-    else{
-        printf("Impossible de lire le fichier");
+    int width, height, channels;
+    unsigned char *data; 
+    if (read_image_data(source_path,&data,&width,&height,&channels)){
+        printf("dismensions : %d, %d \n", width, height);
 
-    }  
+    }
+    else {
+        printf("Erreur : Impossible de lire l'image");
+    }
+
 }
+
+
+
