@@ -1,4 +1,4 @@
-#include <estia-image.h>
+,,#include <estia-image.h>
 #include <stdio.h>
 
 #include "features.h"
@@ -17,7 +17,7 @@ void helloWorld() {
 void dimension (char *source_path){
     int width, height, channels;
     unsigned char *data; 
-    if (read_image_data(source_path,&data,&width,&height,&channels)){
+    if (read_image_data(source_path, &data, &width, &height, &channels)){
         printf("dismensions : %d, %d \n", width, height);
 
     }
@@ -27,5 +27,15 @@ void dimension (char *source_path){
 
 }
 
+void first_pixel (char *source_path){
+typedef struct _pixelRGB {
+  unsigned char R ;
+  unsigned char G ;
+  unsigned char B ;
+} pixelRGB ;
 
+    pixelRGB* pixel1 = getPixel(0, 0); // top-left corner of the image
+    printf("first_pixel: %d, %d, %d", R, G, B);
+
+}
 
