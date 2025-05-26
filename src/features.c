@@ -17,6 +17,7 @@ void helloWorld() {
 }
 void dimension (char *source_path){
     int width, height, channels;
+
     unsigned char *data; 
     if (read_image_data(source_path, &data, &width, &height, &channels)){
         printf("dimensions : %d, %d \n", width, height);
