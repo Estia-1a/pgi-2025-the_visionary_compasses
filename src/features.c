@@ -27,15 +27,23 @@ void dimension (char *source_path){
 
 }
 
-void first_pixel (char *source_path){
-typedef struct _pixelRGB {
-  unsigned char R ;
-  unsigned char G ;
-  unsigned char B ;
-} pixelRGB ;
+void first_pixel(char *source_path) {
+    int width, height, channels;
+    unsigned char *data;
 
-    pixelRGB* pixel1 = getPixel(0, 0); // top-left corner of the image
-    printf("first_pixel: %d, %d, %d", R, G, B);
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        // Coordonnées du premier pixel : x = 0, y = 0
+        // Position dans le tableau : (y * width + x) * channels
+        int index = 0;  // (0 * width + 0) * channels = 0
 
+        unsigned char R = data[index];
+        unsigned char G = data[index + 1];
+        unsigned char B = data[index + 2];
+
+        printf("first_pixel: R=%d, G=%d, B=%d\n", R, G, B);
+
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
 }
-
