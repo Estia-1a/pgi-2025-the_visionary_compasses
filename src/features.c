@@ -1,5 +1,6 @@
 #include <estia-image.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "features.h"
 #include "utils.h"
@@ -18,7 +19,7 @@ void dimension (char *source_path){
     int width, height, channels;
     unsigned char *data; 
     if (read_image_data(source_path, &data, &width, &height, &channels)){
-        printf("dismensions : %d, %d \n", width, height);
+        printf("dimensions : %d, %d \n", width, height);
 
     }
     else {
@@ -36,9 +37,9 @@ void first_pixel(char *source_path) {
         // Position dans le tableau : (y * width + x) * channels
         int index = 0;  // (0 * width + 0) * channels = 0
 
-        unsigned char R = data[index];
-        unsigned char G = data[index + 1];
-        unsigned char B = data[index + 2];
+        int R = data[index];
+        int G = data[index + 1];
+        int B = data[index + 2];
 
         printf("first_pixel: R=%d, G=%d, B=%d\n", R, G, B);
 
