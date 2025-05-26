@@ -1,4 +1,4 @@
-,,#include <estia-image.h>
+#include <estia-image.h>
 #include <stdio.h>
 
 #include "features.h"
