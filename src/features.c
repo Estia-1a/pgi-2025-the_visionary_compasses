@@ -19,7 +19,7 @@ void dimension (char *source_path){
 
     unsigned char *data; 
     if (read_image_data(source_path,&data,&width,&height,&channels)){
-        printf("dismensions : %d, %d \n", width, height);
+        printf("dimensions : %d, %d \n", width, height);
 
     }
     else {
