@@ -33,6 +33,10 @@ int main(int argc, char **argv) {
     /* helloworld() function is defined in feature.h and implemented in feature.c */
     helloWorld();
   }
+  if ( strncmp( configuration.command, "dimension", 10 ) == 0 ) {
+    /* helloworld() function is defined in feature.h and implemented in feature.c */
+    helloWorld();
+  }
   /*
    * TO COMPLETE
    */
