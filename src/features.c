@@ -84,12 +84,12 @@ void second_line(char *source_path) {
 
     if (read_image_data(source_path, &data, &width, &height, &channels)) {
        
-        int index = 3* &width + 1;  
+        int index = 3 * width + 3;  
         int R = data[index];
         int G = data[index + 1];
         int B = data[index + 2];
 
-        printf("second_line: R=%d, G=%d, B=%d\n", R, G, B);
+        printf("second_line: %d, %d, %d\n", R, G, B);
 
         free(data); // Libère la mémoire après usage
     } else {
