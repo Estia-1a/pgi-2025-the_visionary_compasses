@@ -78,6 +78,23 @@ void first_pixel(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+void second_line(char *source_path) {
+    int width, height, channels;
+    unsigned char *data;
 
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       
+        int index = 3 * width + 3;  
+        int R = data[index];
+        int G = data[index + 1];
+        int B = data[index + 2];
+
+        printf("second_line: %d, %d, %d\n", R, G, B);
+
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
 
 
