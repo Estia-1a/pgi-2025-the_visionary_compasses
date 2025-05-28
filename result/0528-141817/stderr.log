@@ -1,0 +1,4 @@
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.c: In function ‘print_pixel’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.c:25:75: warning: comparison between pointer and integer
+   25 |     if (read_image_data(filename, &data, &width, &height, &channel_count) != NULL){
+      |                                                                           ^~
