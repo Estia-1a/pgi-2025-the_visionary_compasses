@@ -20,21 +20,26 @@
 void print_pixel(char *filename, int x, int y) {
     unsigned char *data;
     int width, height, channel_count;
+    pixelRGB *pixel = NULL;
     
 
-    if (read_image_data(filename, &data, &width, &height, &channel_count) != NULL){
-        printf("Erreur lors de la lecture de l'image\n");
-        return;
+    if (read_image_data(filename, &data, &width, &height, &channel_count)){
+        pixel = get_pixel(data, width, height, channel_count, x, y);
+        
+        
+    }
+    else{
+            printf("Erreur lors de la lecture de l'image\n");
     }
 
-    pixelRGB *pixel = get_pixel(data, width, height, channel_count, x, y);
+   
     
     if (pixel == NULL){
-        printf("Erreur : pixel hors limites\n");
+        printf("Erreur : pixel hors limites %d de longueur: %d et de hauteur: %d\n", pixel,width,height);
     } else {
         printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
     }
-    
+    return;
     free(data);
 }
    
