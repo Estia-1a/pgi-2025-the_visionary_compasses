@@ -39,13 +39,13 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
      if (width * height < 10) {
         printf("Erreur : L'image contient moins de 10 pixels.\n");
         free(data);
-        return 0;
+        
      }
 
  
     if (read_image_data(source_path, &data, &width, &height, &channels)) {
         
-        int index = 9;  // 9 car commence le compte à 0
+        int index = 27;  // 9 car commence le compte à 0
  
         unsigned char R = data[index];
         unsigned char G = data[index + 1];
