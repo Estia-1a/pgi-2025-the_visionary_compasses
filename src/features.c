@@ -51,7 +51,7 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
         unsigned char G = data[index + 1];
         unsigned char B = data[index + 2];
  
-        printf("tenth_pixel: R=%d, G=%d, B=%d\n", R, G, B);
+        printf("tenth_pixel: %d, %d, %d\n", R, G, B);
    free(data); // Libère la mémoire après usage
     } else {
         printf("Erreur : Impossible de lire l'image\n");
@@ -71,7 +71,7 @@ void first_pixel(char *source_path) {
         int G = data[index + 1];
         int B = data[index + 2];
 
-        printf("first_pixel: R=%d, G=%d, B=%d\n", R, G, B);
+        printf("first_pixel: %d, %d, %d\n", R, G, B);
 
         free(data); // Libère la mémoire après usage
     } else {
