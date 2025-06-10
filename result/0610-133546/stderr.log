@@ -1,0 +1,6 @@
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.c: In function ‘print_pixel’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.c:38:46: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘pixelRGB *’ {aka ‘struct _pixelRGB *’} [-Wformat=]
+   38 |         printf("Erreur : pixel hors limites %d de longueur: %d et de hauteur: %d\n", pixel,width,height);
+      |                                             ~^                                       ~~~~~
+      |                                              |                                       |
+      |                                              int                                     pixelRGB * {aka struct _pixelRGB *}
