@@ -43,5 +43,37 @@ void print_pixel(char *filename, int x, int y) {
     free(data);
 }
    
+void color_invert(char *filename_in, char *filename_out) {
+    unsigned char *data;
+    int width, height, channel_count;
 
+    if (read_image_data(filename_in, &data, &width, &height, &channel_count)) {
+        printf("Erreur lors de la lecture de l'image : %s\n", filename_in);
+        return;
+    }
 
+    if (channel_count < 3) {
+        printf("Erreur : le nombre de canaux est insuffisant (%d)\n", channel_count);
+        free(data);
+        return;
+    }
+
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            unsigned char *pixel = &data[(y * width + x) * channel_count];
+
+            // Inverser les composantes RGB
+            pixel[0] = 255 - pixel[0]; // R
+            pixel[1] = 255 - pixel[1]; // G
+            pixel[2] = 255 - pixel[2]; // B
+        }
+    }
+
+    if (write_image_data(filename_out, &data, &width, &height)) {
+        printf("Erreur lors de l'écriture de l'image : %s\n", filename_out);
+    } else {
+        printf("Image enregistrée avec couleurs inversées : %s\n", filename_out);
+    }
+
+    free(data);
+}
