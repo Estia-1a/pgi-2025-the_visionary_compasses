@@ -77,6 +77,6 @@ if ( strncmp( configuration.command, "color_invert", 9 ) == 0 ) {
 
 }
 
-}
+
 
  
