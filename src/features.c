@@ -158,3 +158,26 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
 
 }
 
+
+void color_gray (char*source_path) {
+int width = 0, height = 0, channels = 0, x=0, y=0, av=0;
+unsigned char *data = NULL;
+pixelRGB *pixel = NULL;
+
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+                av=(pixel->B+pixel->R+pixel->G)/3;
+                pixel->B=av;
+                pixel->R=av; 
+                pixel->G=av;               
+            }
+        }
+        write_image_data ("image_out_gray.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
