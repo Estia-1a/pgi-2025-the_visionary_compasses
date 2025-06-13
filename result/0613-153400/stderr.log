@@ -1,0 +1,16 @@
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.c: In function ‘print_pixel’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.c:38:46: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘pixelRGB *’ {aka ‘struct _pixelRGB *’} [-Wformat=]
+   38 |         printf("Erreur : pixel hors limites %d de longueur: %d et de hauteur: %d\n", pixel,width,height);
+      |                                             ~^                                       ~~~~~
+      |                                              |                                       |
+      |                                              int                                     pixelRGB * {aka struct _pixelRGB *}
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:2:
+In function ‘atoi’,
+    inlined from ‘main’ at /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:56:13:
+/usr/include/stdlib.h:483:16: warning: argument 1 null where non-null expected [-Wnonnull]
+  483 |   return (int) strtol (__nptr, (char **) NULL, 10);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/stdlib.h: In function ‘main’:
+/usr/include/stdlib.h:177:17: note: in a call to function ‘strtol’ declared ‘nonnull’
+  177 | extern long int strtol (const char *__restrict __nptr,
+      |                 ^~~~~~
