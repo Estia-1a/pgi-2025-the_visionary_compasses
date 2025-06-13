@@ -117,3 +117,44 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
     }
 }
 
+void color_green (char*source_path) {
+int width = 0, height = 0, channels = 0, x=0, y=0;
+unsigned char *data = NULL;
+pixelRGB *pixel = NULL;
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+                pixel->B=0;
+                pixel->R=0;                
+            }
+        }
+        write_image_data ("image_out.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
+
+void color_blue (char*source_path) {
+int width = 0, height = 0, channels = 0, x=0, y=0;
+unsigned char *data = NULL;
+pixelRGB *pixel = NULL;
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+                pixel->G=0;
+                pixel->R=0;                
+            }
+        }
+        write_image_data ("image_out.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+
+}
+
