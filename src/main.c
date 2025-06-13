@@ -47,7 +47,7 @@ if ( strncmp( configuration.command, "tenth_pixel", 9 ) == 0 ) {
 }
 
 if (strncmp(configuration.command, "print_pixel", 11) == 0) {
-    if (configuration.arguments[0] == NULL || configuration.arguments[1] == NULL) {
+    if (configuration.arguments[0] || configuration.arguments[1]) {
         printf("Usage: freud.exe -f <image> -c print_pixel <x> <y>\n");
         return 1;
     }
@@ -64,5 +64,13 @@ if (strncmp(configuration.command, "print_pixel", 11) == 0) {
     /* second_line() function is defined in feature.h and implemented in feature.c */
     second_line(configuration.filenames[0]);
 }
+
+if ( strncmp( configuration.command, "color_red", 9 ) == 0 ) {
+    /* color_red() function is defined in feature.h and implemented in feature.c */
+    color_red(configuration.filenames[0] );
+}
+
   return 0;
 }
+
+ 
