@@ -86,6 +86,11 @@ if ( strncmp( configuration.command, "color_gray", 14 ) == 0 ) {
     color_gray(configuration.filenames[0]);
 }
 
+if ( strncmp( configuration.command, "color_gray_luminance", 14 ) == 0 ) {
+    /* color_gray() function is defined in feature.h and implemented in feature.c */
+    color_gray_luminance(configuration.filenames[0]);
+}
+
   return 0;
 }
 
