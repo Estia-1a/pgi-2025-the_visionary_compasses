@@ -97,4 +97,47 @@ void second_line(char *source_path) {
     }
 }
 
-
+void min_pixel(char *source_path) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        // Variables pour stocker le pixel minimum
+        int min_sum = 999999; // Initialiser avec une valeur très grande
+        int min_x = 0, min_y = 0;
+        unsigned char min_R, min_G, min_B;
+        
+        // Parcourir tous les pixels de l'image
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Calculer l'index dans le tableau data
+                int index = (y * width + x) * channels;
+                
+                // Obtenir les valeurs RGB du pixel actuel
+                unsigned char R = data[index];
+                unsigned char G = data[index + 1];
+                unsigned char B = data[index + 2];
+                
+                // Calculer la somme RGB
+                int current_sum = R + G + B;
+                
+                // Vérifier si c'est le minimum (premier rencontré en cas d'égalité)
+                if (current_sum < min_sum) {
+                    min_sum = current_sum;
+                    min_x = x;
+                    min_y = y;
+                    min_R = R;
+                    min_G = G;
+                    min_B = B;
+                }
+            }
+        }
+        
+        // Afficher le résultat dans le format requis
+        printf("min_pixel (%d, %d): %d, %d, %d\n", min_x, min_y, min_R, min_G, min_B);
+        
+        free(data); // Libérer la mémoire
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
