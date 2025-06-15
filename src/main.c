@@ -101,6 +101,10 @@ if ( strncmp( configuration.command, "rotate_acw", 9 ) == 0 ) {
     rotate_acw(configuration.filenames[0] );
 }
 
+if ( strncmp( configuration.command, "miror_horizontal", 9 ) == 0 ) {
+    
+    miror_horizontal(configuration.filenames[0] );
+}
 
 
   return 0;

@@ -215,3 +215,53 @@ void rotate_acw(char* source_path) {
         printf("Erreur : Impossible de lire l'image.\n");
     }
 }
+
+
+void miror_horizontal(char* source_path) {
+    int largeur = 0, hauteur = 0, canaux = 0;
+    unsigned char *image_originale = NULL;
+    unsigned char *image_rotation = NULL;
+
+    // Lire l'image d'entrée
+    if (read_image_data(source_path, &image_originale, &largeur, &hauteur, &canaux)) {
+        int nouvelle_largeur = largeur;
+        int nouvelle_hauteur = hauteur;
+
+        // Allouer de la mémoire pour l'image tournée
+        image_rotation = (unsigned char*)malloc(nouvelle_largeur * nouvelle_hauteur * canaux);
+        if (image_rotation == NULL) {
+            printf("Erreur : impossible d'allouer la mémoire pour l'image tournée.\n");
+            free(image_originale);
+            return;
+        }
+
+        
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
+               
+                int index_original = (i * largeur + j) * canaux;
+
+                // Nouvelle position après rotation
+                int x = i;
+                int y = nouvelle_hauteur - 1 - i;
+
+                // Calculer l'index du pixel dans l'image tournée
+                int index_rotation = (y * nouvelle_largeur + x) * canaux;
+
+                
+                for (int c = 0; c < canaux; c++) {
+                    image_rotation[index_rotation + c] = image_originale[index_original + c];
+                }
+            }
+        }
+
+        // Sauvegarder l'image tournée
+        write_image_data("image_out.bmp", image_rotation, nouvelle_largeur, nouvelle_hauteur);
+
+        // Libérer la mémoire
+        free(image_originale);
+        free(image_rotation);
+    } else {
+        printf("Erreur : Impossible de lire l'image.\n");
+    }
+}
