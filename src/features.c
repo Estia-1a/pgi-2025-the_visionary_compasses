@@ -199,8 +199,12 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
                 pixel->G=value;               
             }
         }
-        write_image_data ("image_out_gray.bmp", data, width, height);
-        free(data); // Libère la mémoire après usage
+
+        write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+
+        // Libérer la mémoire
+        free(data);
+        free(rotated_data);
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }

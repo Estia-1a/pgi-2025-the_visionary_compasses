@@ -91,6 +91,15 @@ if ( strncmp( configuration.command, "color_gray_luminance", 14 ) == 0 ) {
     color_gray_luminance(configuration.filenames[0]);
 }
 
+if ( strncmp( configuration.command, "rotate_cw", 9 ) == 0 ) {
+    
+    rotate_cw(configuration.filenames[0] );
+}
+if ( strncmp( configuration.command, "miror_vertical", 9 ) == 0 ) {
+    
+    miror_vertical(configuration.filenames[0] );
+}
+
   return 0;
 }
 
