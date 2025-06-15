@@ -106,6 +106,15 @@ if ( strncmp( configuration.command, "miror_horizontal", 9 ) == 0 ) {
     miror_horizontal(configuration.filenames[0] );
 }
 
+if ( strncmp( configuration.command, "miror_vertical", 9 ) == 0 ) {
+    
+    miror_vertical(configuration.filenames[0] );
+}
+
+if ( strncmp( configuration.command, "miror_total", 9 ) == 0 ) {
+    
+    miror_total(configuration.filenames[0] );
+}
 
   return 0;
 }
