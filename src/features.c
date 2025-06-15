@@ -96,5 +96,49 @@ void second_line(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+void max_pixel(char *source_path) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        // Variables pour stocker le pixel maximum
+        int max_sum = -1;
+        int max_x = 0, max_y = 0;
+        unsigned char max_R, max_G, max_B;
+        
+        // Parcourir tous les pixels de l'image
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Calculer l'index dans le tableau data
+                int index = (y * width + x) * channels;
+                
+                // Obtenir les valeurs RGB du pixel actuel
+                unsigned char R = data[index];
+                unsigned char G = data[index + 1];
+                unsigned char B = data[index + 2];
+                
+                // Calculer la somme RGB
+                int current_sum = R + G + B;
+                
+                // Vérifier si c'est le maximum (premier rencontré en cas d'égalité)
+                if (current_sum > max_sum) {
+                    max_sum = current_sum;
+                    max_x = x;
+                    max_y = y;
+                    max_R = R;
+                    max_G = G;
+                    max_B = B;
+                }
+            }
+        }
+        
+        // Afficher le résultat dans le format requis
+        printf("max_pixel (%d, %d): %d, %d, %d\n", max_x, max_y, max_R, max_G, max_B);
+        
+        free(data); // Libérer la mémoire
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
 
 
