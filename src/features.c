@@ -100,7 +100,7 @@ void second_line(char *source_path) {
 void color_red (char*source_path) {
     int width = 0, height = 0, channels = 0, x=0, y=0;
     unsigned char *data = NULL;
-    pixelRGB *pixel = NULL;
+    struct pixelRGB *pixel = NULL;
 
 if (read_image_data(source_path, &data, &width, &height, &channels)) {
        for (x=0; x<width; x++){
@@ -117,7 +117,49 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
     }
 }
 
+void color_green (char*source_path) {
+    int width = 0, height = 0, channels = 0, x=0, y=0;
+    unsigned char *data = NULL;
+    struct pixelRGB *pixel = NULL;
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+                pixel->R=0;
+                pixel->B=0;                
+            }
+        }
+        write_image_data ("image_out.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
+
+void color_blue (char*source_path) {
+    int width = 0, height = 0, channels = 0, x=0, y=0;
+    unsigned char *data = NULL;
+    struct pixelRGB *pixel = NULL;
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+                pixel->R=0;
+                pixel->G=0;                
+            }
+        }
+        write_image_data ("image_out.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
+
 void rotate_cw(char* source_path) {
+    int width = 0, height = 0;
+    unsigned char *data = NULL;
     int largeur = 0, hauteur = 0, canaux = 0;
     unsigned char *image_originale = NULL;
     unsigned char *image_rotation = NULL;
@@ -213,6 +255,8 @@ void rotate_acw(char* source_path) {
 
 
 void miror_horizontal(char* source_path) {
+    int width = 0, height = 0;
+    unsigned char *data = NULL;
     int largeur = 0, hauteur = 0, canaux = 0;
     unsigned char *image_originale = NULL;
     unsigned char *image_rotation = NULL;
@@ -304,31 +348,3 @@ void miror_vertical(char* source_path) {
         printf("Erreur : Impossible de lire l'image.\n");
     }
 }
-
-
-void max_component(char *source_path, int composante_idex){
-    int width, height, channel;
-    unsigned char *image = stbi_load(source_path, &width, &height, &channel, 3); // force RGB
-    if (!image) {
-        printf("Erreur de lecture de l'image\n");
-        return;
-    }
-
-    int max = -1, max_x = 0, max_y = 0;
-
-    for (int y = 0; y < h; y++){
-        for (int x = 0; x < w; x++){
-            int idx = (y * w + x) * 3 + composante_idex;
-            if (img[idx] > max) {
-                max = img[idx];
-                max_x = x;
-                max_y = y;
-            }
-        }
-    }
-
-    const char *names[3] = {"R", "G", "B"};
-    printf("max_component %s (%d, %d): %d\n", names[composante_idex], max_x, max_y, max);
-    stbi_image_free(img);
-}
-
