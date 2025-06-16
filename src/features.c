@@ -160,5 +160,30 @@ void min_component(char *source_path, char component) {
             case 'G': component_offset = 1; break;
             case 'B': component_offset = 2; break;
         }
+    
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            // Calculer l'index dans le tableau data
+            int index = (y * width + x) * channels;
+            
+            // Obtenir la valeur du composant choisi
+            unsigned char current_component = data[index + component_offset];
+            
+            
+            if (current_component < min_value) {
+                min_value = current_component;
+                min_x = x;
+                min_y = y;
+            }
+        }
     }
-        
+    
+    
+    printf("min_component %c (%d, %d): %d\n", component, min_x, min_y, min_value);
+    
+    free(data); 
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
+    
