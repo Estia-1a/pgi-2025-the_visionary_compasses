@@ -140,5 +140,50 @@ void max_pixel(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-
-
+void min_component(char *source_path, char component) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    // Vérifier que le composant est valide
+    if (component != 'R' && component != 'G' && component != 'B') {
+        printf("Erreur : Composant invalide. Utilisez R, G ou B\n");
+        return;
+    }
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int min_value = 256; 
+        int min_x = 0, min_y = 0;
+        
+        int component_offset;
+        switch (component) {
+            case 'R': component_offset = 0; break;
+            case 'G': component_offset = 1; break;
+            case 'B': component_offset = 2; break;
+        }
+    
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            // Calculer l'index dans le tableau data
+            int index = (y * width + x) * channels;
+            
+            // Obtenir la valeur du composant choisi
+            unsigned char current_component = data[index + component_offset];
+            
+            
+            if (current_component < min_value) {
+                min_value = current_component;
+                min_x = x;
+                min_y = y;
+            }
+        }
+    }
+    
+    
+    printf("min_component %c (%d, %d): %d\n", component, min_x, min_y, min_value);
+    
+    free(data); 
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
+    

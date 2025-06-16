@@ -73,6 +73,20 @@ if ( strncmp( configuration.command, "max_pixel", 9 ) == 0 ) {
     /* max_pixel() function is defined in feature.h and implemented in feature.c */
     max_pixel(configuration.filenames[0]);
 }
+if (strncmp(configuration.command, "min_component", 13) == 0) {
+    if (configuration.arguments[0] == NULL) {
+        printf("Usage: freud.exe -f <image> -c min_component <R|G|B>\n");
+        printf("Exemple: freud.exe -f image.jpeg -c min_component R\n");
+        return 1;
+    }
+    char component = configuration.arguments[0][0]; // Premier caractère
+    if (component != 'R' && component != 'G' && component != 'B') {
+        printf("Erreur: Composant invalide '%s'. Utilisez R, G ou B\n", configuration.arguments[0]);
+        return 1;
+    }
+    min_component(configuration.filenames[0], component);
+}
   return 0;
 }
+
 
