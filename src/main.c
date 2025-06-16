@@ -76,3 +76,4 @@ if ( strncmp( configuration.command, "max_pixel", 9 ) == 0 ) {
   return 0;
 }
 
+
