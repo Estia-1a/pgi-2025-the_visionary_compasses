@@ -446,7 +446,7 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
 void color_gray_luminance (char*source_path) {
 int width = 0, height = 0, channels = 0, x=0, y=0;
 unsigned char *data = NULL;
-pixelRGB *pixel = NULL;
+struct pixelRGB *pixel = NULL;
 unsigned char value = 0;
 
 
