@@ -96,6 +96,12 @@ if ( strncmp( configuration.command, "color_invert", 9 ) == 0 ) {
     color_invert( configuration.filenames[0] );
 }
 
+if ( strncmp( configuration.command, "miror_total", 9 ) == 0 ) {
+    /* dimension() function is defined in feature.h and implemented in feature.c */
+    miror_total( configuration.filenames[0] );
+}
+
+
 }
 
 

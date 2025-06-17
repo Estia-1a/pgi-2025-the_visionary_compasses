@@ -15,4 +15,5 @@ void color_green (char*source_path);
 void color_blue (char*source_path);
 void color_gray (char*source_path);
 void color_gray_luminance (char*source_path);
+void miror_total (char*source_path);
 #endif
