@@ -228,9 +228,6 @@ void rotate_acw(char* source_path) {
                
                 int index_original = (i * largeur + j) * canaux;
 
-                // Nouvelle position après rotation
-                int x = i;
-                int y = nouvelle_hauteur - 1 - j;
 
                 // Calculer l'index du pixel dans l'image tournée
                 int index_rotation = (y * nouvelle_largeur + x) * canaux;
@@ -251,7 +248,6 @@ void rotate_acw(char* source_path) {
     } else {
         printf("Erreur : Impossible de lire l'image.\n");
     }
-
 }
 
 
