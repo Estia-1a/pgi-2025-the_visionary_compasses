@@ -1,0 +1,24 @@
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c: In function ‘rotate_acw’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:233:39: error: ‘y’ undeclared (first use in this function)
+  233 |                 int index_rotation = (y * nouvelle_largeur + x) * canaux;
+      |                                       ^
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:233:39: note: each undeclared identifier is reported only once for each function it appears in
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:233:62: error: ‘x’ undeclared (first use in this function)
+  233 |                 int index_rotation = (y * nouvelle_largeur + x) * canaux;
+      |                                                              ^
+gmake[2]: *** [CMakeFiles/freud.dir/build.make:93: CMakeFiles/freud.dir/src/features.c.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:2:
+In function ‘atoi’,
+    inlined from ‘main’ at /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:56:13:
+/usr/include/stdlib.h:483:16: warning: argument 1 null where non-null expected [-Wnonnull]
+  483 |   return (int) strtol (__nptr, (char **) NULL, 10);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/stdlib.h: In function ‘main’:
+/usr/include/stdlib.h:177:17: note: in a call to function ‘strtol’ declared ‘nonnull’
+  177 | extern long int strtol (const char *__restrict __nptr,
+      |                 ^~~~~~
+gmake[1]: *** [CMakeFiles/Makefile2:87: CMakeFiles/freud.dir/all] Error 2
+gmake: *** [Makefile:136: all] Error 2
+
+The process '/usr/local/bin/cmake' failed with exit code 2
