@@ -153,6 +153,10 @@ if (strncmp(configuration.command, "max_component", 13) == 0) {
     // Appeler la fonction
     max_component(configuration.filenames[0], component);
 }
+
+if ( strncmp( configuration.command, "stat_report", 11 ) == 0 ) {
+    stat_report(configuration.filenames[0]);
+}
 }
 
 
