@@ -97,7 +97,7 @@ void second_line(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-<<<<<<< HEAD
+
 void color_red (char*source_path) {
     int width = 0, height = 0, channels = 0, x=0, y=0;
     unsigned char *data = NULL;
@@ -268,34 +268,90 @@ void miror_horizontal(char* source_path) {
             return;
         }
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                
-                struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
+        
+        for (int i = 0; i < hauteur; i++) {
+            for (int j = 0; j < largeur; j++) {
+               
+                int index_original = (i * largeur + j) * canaux;
 
-                int new_x = x;
-                int new_y = new_height - 1 - y;
+                // Nouvelle position après rotation
+                int x = i;
+                int y = nouvelle_hauteur - 1 - i;
+
+                // Calculer l'index du pixel dans l'image tournée
+                int index_rotation = (y * nouvelle_largeur + x) * canaux;
 
                 
-                struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
-
-                
-                dst_pixel->R = src_pixel->R;
-                dst_pixel->G = src_pixel->G;
-                dst_pixel->B = src_pixel->B;
+                for (int c = 0; c < canaux; c++) {
+                    image_rotation[index_rotation + c] = image_originale[index_original + c];
+                }
             }
         }
+        write_image_data ("image_out_gray.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+}
+}
 
-        write_image_data("image_out.bmp", rotated_data, new_width, new_height);
-
+void max_pixel(char *source_path) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        // Variables pour stocker le pixel maximum
+        int max_sum = -1;
+        int max_x = 0, max_y = 0;
+        unsigned char max_R, max_G, max_B;
         
-        free(data);
-        free(rotated_data);
+        // Parcourir tous les pixels de l'image
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Calculer l'index dans le tableau data
+                int index = (y * width + x) * channels;
+                
+                // Obtenir les valeurs RGB du pixel actuel
+                unsigned char R = data[index];
+                unsigned char G = data[index + 1];
+                unsigned char B = data[index + 2];
+                
+                // Calculer la somme RGB
+                int current_sum = R + G + B;
+                
+<<<<<<< HEAD
+                // Vérifier si c'est le maximum (premier rencontré en cas d'égalité)
+                if (current_sum > max_sum) {
+                    max_sum = current_sum;
+                    max_x = x;
+                    max_y = y;
+                    max_R = R;
+                    max_G = G;
+                    max_B = B;
+=======
+                // Vérifier si c'est le minimum (premier rencontré en cas d'égalité)
+                if (current_sum < min_sum) {
+                    min_sum = current_sum;
+                    min_x = x;
+                    min_y = y;
+                    min_R = R;
+                    min_G = G;
+                    min_B = B;
+>>>>>>> min_pixel
+                }
+            }
+        }
+        
+        // Afficher le résultat dans le format requis
+<<<<<<< HEAD
+        printf("max_pixel (%d, %d): %d, %d, %d\n", max_x, max_y, max_R, max_G, max_B);
+=======
+        printf("min_pixel (%d, %d): %d, %d, %d\n", min_x, min_y, min_R, min_G, min_B);
+>>>>>>> min_pixel
+        
+        free(data); // Libérer la mémoire
+>>>>>>> JEANNE
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-<<<<<<< HEAD
 
 void miror_vertical(char* source_path) {
     int width = 0, height = 0, channels = 0;
@@ -454,8 +510,10 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
         }
         write_image_data ("image_out_gray.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
-=======
-<<<<<<< HEAD
+}
+}
+}
+
 void min_component(char *source_path, char component) {
     int width, height, channels;
     unsigned char *data;
@@ -498,8 +556,14 @@ void min_component(char *source_path, char component) {
     printf("min_component %c (%d, %d): %d\n", component, min_x, min_y, min_value);
     
     free(data); 
->>>>>>> JEANNE
+
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+<<<<<<< HEAD
+=======
+    
+=======
+>>>>>>> min_pixel
+>>>>>>> JEANNE
