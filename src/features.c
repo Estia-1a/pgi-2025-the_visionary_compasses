@@ -561,4 +561,40 @@ void min_component(char *source_path, char component) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-    
+void color_desaturate (char*source_path) {
+int width = 0, height = 0, channels = 0, x=0, y=0;
+unsigned char *data = NULL;
+struct pixelRGB *pixel = NULL;
+unsigned char value = 0;
+
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+
+                unsigned char R = pixel->R;
+                unsigned char G = pixel->G;
+                unsigned char B = pixel->B;
+
+                unsigned char max_val = R;
+                if (G > max_val) max_val = G;
+                if (B > max_val) max_val = B;
+
+                unsigned char min_val = R;
+                if (G < min_val) min_val = G;
+                if (B < min_val) min_val = B;
+
+                unsigned char value = (max_val + min_val) / 2;
+
+                pixel->B=value;
+                pixel->R=value; 
+                pixel->G=value;               
+            }
+        }
+        write_image_data ("image_out.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
