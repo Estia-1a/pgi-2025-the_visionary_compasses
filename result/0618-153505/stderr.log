@@ -1,0 +1,10 @@
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:2:
+In function ‘atoi’,
+    inlined from ‘main’ at /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:56:13:
+/usr/include/stdlib.h:483:16: warning: argument 1 null where non-null expected [-Wnonnull]
+  483 |   return (int) strtol (__nptr, (char **) NULL, 10);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/stdlib.h: In function ‘main’:
+/usr/include/stdlib.h:177:17: note: in a call to function ‘strtol’ declared ‘nonnull’
+  177 | extern long int strtol (const char *__restrict __nptr,
+      |                 ^~~~~~
