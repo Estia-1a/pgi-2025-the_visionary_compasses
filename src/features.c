@@ -316,7 +316,6 @@ void max_pixel(char *source_path) {
                 // Calculer la somme RGB
                 int current_sum = R + G + B;
                 
-<<<<<<< HEAD
                 // Vérifier si c'est le maximum (premier rencontré en cas d'égalité)
                 if (current_sum > max_sum) {
                     max_sum = current_sum;
@@ -325,26 +324,12 @@ void max_pixel(char *source_path) {
                     max_R = R;
                     max_G = G;
                     max_B = B;
-=======
-                // Vérifier si c'est le minimum (premier rencontré en cas d'égalité)
-                if (current_sum < min_sum) {
-                    min_sum = current_sum;
-                    min_x = x;
-                    min_y = y;
-                    min_R = R;
-                    min_G = G;
-                    min_B = B;
->>>>>>> min_pixel
                 }
             }
         }
         
         // Afficher le résultat dans le format requis
-<<<<<<< HEAD
         printf("max_pixel (%d, %d): %d, %d, %d\n", max_x, max_y, max_R, max_G, max_B);
-=======
-        printf("min_pixel (%d, %d): %d, %d, %d\n", min_x, min_y, min_R, min_G, min_B);
->>>>>>> min_pixel
         
         free(data); // Libérer la mémoire
 >>>>>>> JEANNE
