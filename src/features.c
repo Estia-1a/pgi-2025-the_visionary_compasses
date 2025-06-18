@@ -97,7 +97,7 @@ void second_line(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-<<<<<<< HEAD
+
 void color_red (char*source_path) {
     int width = 0, height = 0, channels = 0, x=0, y=0;
     unsigned char *data = NULL;
@@ -293,7 +293,9 @@ void miror_horizontal(char* source_path) {
         }
         write_image_data ("image_out_gray.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
-=======
+}
+}
+
 void max_pixel(char *source_path) {
     int width, height, channels;
     unsigned char *data;
@@ -334,7 +336,7 @@ void max_pixel(char *source_path) {
         printf("max_pixel (%d, %d): %d, %d, %d\n", max_x, max_y, max_R, max_G, max_B);
         
         free(data); // Libérer la mémoire
->>>>>>> JEANNE
+
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
@@ -501,8 +503,10 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
         }
         write_image_data ("image_out_gray.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
-=======
-<<<<<<< HEAD
+}
+}
+}
+
 void min_component(char *source_path, char component) {
     int width, height, channels;
     unsigned char *data;
@@ -545,9 +549,9 @@ void min_component(char *source_path, char component) {
     printf("min_component %c (%d, %d): %d\n", component, min_x, min_y, min_value);
     
     free(data); 
->>>>>>> JEANNE
+
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-    
+
