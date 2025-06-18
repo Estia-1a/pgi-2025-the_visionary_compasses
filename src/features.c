@@ -294,27 +294,15 @@ void miror_horizontal(char* source_path) {
         write_image_data ("image_out_gray.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
 =======
-<<<<<<< HEAD
 void max_pixel(char *source_path) {
-=======
-
-void min_pixel(char *source_path) {
->>>>>>> min_pixel
     int width, height, channels;
     unsigned char *data;
     
     if (read_image_data(source_path, &data, &width, &height, &channels)) {
-<<<<<<< HEAD
         // Variables pour stocker le pixel maximum
         int max_sum = -1;
         int max_x = 0, max_y = 0;
         unsigned char max_R, max_G, max_B;
-=======
-        // Variables pour stocker le pixel minimum
-        int min_sum = 999999; // Initialiser avec une valeur très grande
-        int min_x = 0, min_y = 0;
-        unsigned char min_R, min_G, min_B;
->>>>>>> min_pixel
         
         // Parcourir tous les pixels de l'image
         for (int y = 0; y < height; y++) {
@@ -330,7 +318,6 @@ void min_pixel(char *source_path) {
                 // Calculer la somme RGB
                 int current_sum = R + G + B;
                 
-<<<<<<< HEAD
                 // Vérifier si c'est le maximum (premier rencontré en cas d'égalité)
                 if (current_sum > max_sum) {
                     max_sum = current_sum;
@@ -339,26 +326,12 @@ void min_pixel(char *source_path) {
                     max_R = R;
                     max_G = G;
                     max_B = B;
-=======
-                // Vérifier si c'est le minimum (premier rencontré en cas d'égalité)
-                if (current_sum < min_sum) {
-                    min_sum = current_sum;
-                    min_x = x;
-                    min_y = y;
-                    min_R = R;
-                    min_G = G;
-                    min_B = B;
->>>>>>> min_pixel
                 }
             }
         }
         
         // Afficher le résultat dans le format requis
-<<<<<<< HEAD
         printf("max_pixel (%d, %d): %d, %d, %d\n", max_x, max_y, max_R, max_G, max_B);
-=======
-        printf("min_pixel (%d, %d): %d, %d, %d\n", min_x, min_y, min_R, min_G, min_B);
->>>>>>> min_pixel
         
         free(data); // Libérer la mémoire
 >>>>>>> JEANNE
@@ -366,7 +339,6 @@ void min_pixel(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-<<<<<<< HEAD
 
 void miror_vertical(char* source_path) {
     int largeur = 0, hauteur = 0, canaux = 0;
@@ -578,9 +550,4 @@ void min_component(char *source_path, char component) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-<<<<<<< HEAD
-=======
     
-=======
->>>>>>> min_pixel
->>>>>>> JEANNE
