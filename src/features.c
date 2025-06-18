@@ -630,5 +630,5 @@ void max_component(char *source_path, char component) {
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
-}
+    
 }
