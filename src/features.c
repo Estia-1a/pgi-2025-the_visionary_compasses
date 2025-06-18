@@ -586,3 +586,7 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+void max_component(char *source_path, char component) {
+    int width, height, channels;
+    unsigned char *data;
+}
