@@ -657,3 +657,29 @@ void calculate_max_pixel(char *source_path, int *x, int *y, int *r, int *g, int 
         free(data);
     }
 }
+void calculate_min_pixel(char *source_path, int *x, int *y, int *r, int *g, int *b) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int min_sum = 999999;
+        *x = 0; *y = 0;
+        
+        for (int py = 0; py < height; py++) {
+            for (int px = 0; px < width; px++) {
+                int index = (py * width + px) * channels;
+                unsigned char R = data[index];
+                unsigned char G = data[index + 1];
+                unsigned char B = data[index + 2];
+                int current_sum = R + G + B;
+                
+                if (current_sum < min_sum) {
+                    min_sum = current_sum;
+                    *x = px; *y = py;
+                    *r = R; *g = G; *b = B;
+                }
+            }
+        }
+        free(data);
+    }
+}
