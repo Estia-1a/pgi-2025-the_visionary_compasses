@@ -589,4 +589,21 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
 void max_component(char *source_path, char component) {
     int width, height, channels;
     unsigned char *data;
+     if (component != 'R' && component != 'G' && component != 'B') {
+        printf("Erreur : Composant invalide. Utilisez R, G ou B\n");
+        return;
+    }
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       
+        int max_value = -1; 
+        int max_x = 0, max_y = 0;
+        
+        // Déterminer l'offset selon le composant choisi
+        int component_offset;
+        switch (component) {
+            case 'R': component_offset = 0; break;
+            case 'G': component_offset = 1; break;
+            case 'B': component_offset = 2; break;
+        }
 }
