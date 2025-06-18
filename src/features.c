@@ -625,10 +625,8 @@ void max_component(char *source_path, char component) {
         }
         
         printf("max_component %c (%d, %d): %d\n", component, max_x, max_y, max_value);
-        
         free(data);
     } else {
         printf("Erreur : Impossible de lire l'image\n");
-    }
-    
+    } 
 }
