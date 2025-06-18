@@ -21,4 +21,7 @@ void rotate_acw (char *source_path);
 void miror_horizontal(char*source_path);
 void miror_vertical(char*source_path);
 void color_desaturate(char*source_path);
+void max_pixel(char *source_path);
+void min_component(char *source_path, char component);
+void min_pixel(char *source_path);
 #endif

@@ -97,6 +97,7 @@ void second_line(char *source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+<<<<<<< HEAD
 void color_red (char*source_path) {
     int width = 0, height = 0, channels = 0, x=0, y=0;
     unsigned char *data = NULL;
@@ -294,6 +295,7 @@ void miror_horizontal(char* source_path) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+<<<<<<< HEAD
 
 void miror_vertical(char* source_path) {
     int width = 0, height = 0, channels = 0;
@@ -452,45 +454,51 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
         }
         write_image_data ("image_out_gray.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
-    } else {
-        printf("Erreur : Impossible de lire l'image\n");
+=======
+<<<<<<< HEAD
+void min_component(char *source_path, char component) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    // Vérifier que le composant est valide
+    if (component != 'R' && component != 'G' && component != 'B') {
+        printf("Erreur : Composant invalide. Utilisez R, G ou B\n");
+        return;
     }
-
-}
-
-void color_desaturate (char*source_path) {
-int width = 0, height = 0, channels = 0, x=0, y=0;
-unsigned char *data = NULL;
-struct pixelRGB *pixel = NULL;
-unsigned char value;
-
-
-if (read_image_data(source_path, &data, &width, &height, &channels)) {
-       for (x=0; x<width; x++){
-            for (y=0; y<height; y++){
-                pixel = get_pixel(data, width, height, channels, x, y);
-
-                unsigned char R = pixel->R;
-                unsigned char G = pixel->G;
-                unsigned char B = pixel->B;
-
-                unsigned char max_val = R;
-                if (G > max_val) max_val = G;
-                if (B > max_val) max_val = B;
-
-                unsigned char min_val = R;
-                if (G < min_val) min_val = G;
-                if (B < min_val) min_val = B;
-
-                unsigned char value = (max_val + min_val) / 2;
-
-                pixel->B=value;
-                pixel->R=value; 
-                pixel->G=value;               
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int min_value = 256; 
+        int min_x = 0, min_y = 0;
+        
+        int component_offset;
+        switch (component) {
+            case 'R': component_offset = 0; break;
+            case 'G': component_offset = 1; break;
+            case 'B': component_offset = 2; break;
+        }
+    
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            // Calculer l'index dans le tableau data
+            int index = (y * width + x) * channels;
+            
+            // Obtenir la valeur du composant choisi
+            unsigned char current_component = data[index + component_offset];
+            
+            
+            if (current_component < min_value) {
+                min_value = current_component;
+                min_x = x;
+                min_y = y;
             }
         }
-        write_image_data ("image_out.bmp", data, width, height);
-        free(data); // Libère la mémoire après usage
+    }
+    
+    
+    printf("min_component %c (%d, %d): %d\n", component, min_x, min_y, min_value);
+    
+    free(data); 
+>>>>>>> JEANNE
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
