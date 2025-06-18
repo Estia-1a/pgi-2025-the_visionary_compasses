@@ -100,8 +100,28 @@ if ( strncmp( configuration.command, "miror_total", 9 ) == 0 ) {
     /* dimension() function is defined in feature.h and implemented in feature.c */
     miror_total( configuration.filenames[0] );
 }
+if ( strncmp( configuration.command, "rotate_cw", 9 ) == 0 ) {
+    /* dimension() function is defined in feature.h and implemented in feature.c */
+    rotate_cw( configuration.filenames[0] );
+}
+if ( strncmp( configuration.command, "rotate_acw", 9 ) == 0 ) {
+    /* dimension() function is defined in feature.h and implemented in feature.c */
+    rotate_acw( configuration.filenames[0] );
+}
 
+if ( strncmp( configuration.command, "miror_horizontal", 9 ) == 0 ) {
+    /* dimension() function is defined in feature.h and implemented in feature.c */
+    miror_horizontal( configuration.filenames[0] );
+}
 
+if ( strncmp( configuration.command, "miror_vertical", 9 ) == 0 ) {
+    /* dimension() function is defined in feature.h and implemented in feature.c */
+    miror_vertical( configuration.filenames[0] );
+}
+if ( strncmp( configuration.command, "color_desaturate", 9 ) == 0 ) {
+    /* dimension() function is defined in feature.h and implemented in feature.c */
+    color_desaturate( configuration.filenames[0] );
+}
 }
 
 

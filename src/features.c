@@ -205,144 +205,138 @@ void rotate_cw(char* source_path) {
 }
 
 void rotate_acw(char* source_path) {
-    int largeur = 0, hauteur = 0, canaux = 0;
-    unsigned char *image_originale = NULL;
-    unsigned char *image_rotation = NULL;
+    int width = 0, height = 0, channels = 0;
+    unsigned char *data = NULL;
+    unsigned char *rotated_data = NULL;
 
-    // Lire l'image d'entrée
-    if (read_image_data(source_path, &image_originale, &largeur, &hauteur, &canaux)) {
-        int nouvelle_largeur = hauteur;
-        int nouvelle_hauteur = largeur;
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int new_width = height;
+        int new_height = width;
 
-        // Allouer de la mémoire pour l'image tournée
-        image_rotation = (unsigned char*)malloc(nouvelle_largeur * nouvelle_hauteur * canaux);
-        if (image_rotation == NULL) {
-            printf("Erreur : impossible d'allouer la mémoire pour l'image tournée.\n");
-            free(image_originale);
+        
+        rotated_data = (unsigned char *)malloc(new_width * new_height * channels);
+        if (!rotated_data) {
+            printf("Erreur : échec d'allocation mémoire.\n");
+            free(data);
             return;
         }
 
-        
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
-               
-                int index_original = (i * largeur + j) * canaux;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                
+                struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
 
-
-                // Calculer l'index du pixel dans l'image tournée
-                int index_rotation = (y * nouvelle_largeur + x) * canaux;
+                int new_x = y;
+                int new_y = new_height - 1 - x;
 
                 
-                for (int c = 0; c < canaux; c++) {
-                    image_rotation[index_rotation + c] = image_originale[index_original + c];
-                }
+                struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
+
+                
+                dst_pixel->R = src_pixel->R;
+                dst_pixel->G = src_pixel->G;
+                dst_pixel->B = src_pixel->B;
             }
         }
 
-        // Sauvegarder l'image tournée
-        write_image_data("image_out.bmp", image_rotation, nouvelle_largeur, nouvelle_hauteur);
+        write_image_data("image_out.bmp", rotated_data, new_width, new_height);
 
-        // Libérer la mémoire
-        free(image_originale);
-        free(image_rotation);
+        
+        free(data);
+        free(rotated_data);
     } else {
-        printf("Erreur : Impossible de lire l'image.\n");
+        printf("Erreur : Impossible de lire l'image\n");
     }
 }
 
 
 void miror_horizontal(char* source_path) {
-    int width = 0, height = 0;
+    int width = 0, height = 0, channels = 0;
     unsigned char *data = NULL;
-    int largeur = 0, hauteur = 0, canaux = 0;
-    unsigned char *image_originale = NULL;
-    unsigned char *image_rotation = NULL;
+    unsigned char *rotated_data = NULL;
 
-    // Lire l'image d'entrée
-    if (read_image_data(source_path, &image_originale, &largeur, &hauteur, &canaux)) {
-        int nouvelle_largeur = largeur;
-        int nouvelle_hauteur = hauteur;
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int new_width = width;
+        int new_height = height;
 
-        // Allouer de la mémoire pour l'image tournée
-        image_rotation = (unsigned char*)malloc(nouvelle_largeur * nouvelle_hauteur * canaux);
-        if (image_rotation == NULL) {
-            printf("Erreur : impossible d'allouer la mémoire pour l'image tournée.\n");
-            free(image_originale);
+        
+        rotated_data = (unsigned char *)malloc(new_width * new_height * channels);
+        if (!rotated_data) {
+            printf("Erreur : échec d'allocation mémoire.\n");
+            free(data);
             return;
         }
 
-        
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
-               
-                int index_original = (i * largeur + j) * canaux;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                
+                struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
 
-                // Nouvelle position après rotation
-                int x = i;
-                int y = nouvelle_hauteur - 1 - i;
-
-                // Calculer l'index du pixel dans l'image tournée
-                int index_rotation = (y * nouvelle_largeur + x) * canaux;
+                int new_x = x;
+                int new_y = new_height - 1 - y;
 
                 
-                for (int c = 0; c < canaux; c++) {
-                    image_rotation[index_rotation + c] = image_originale[index_original + c];
-                }
+                struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
+
+                
+                dst_pixel->R = src_pixel->R;
+                dst_pixel->G = src_pixel->G;
+                dst_pixel->B = src_pixel->B;
             }
         }
-        write_image_data ("image_out_gray.bmp", data, width, height);
-        free(data); // Libère la mémoire après usage
+
+        write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+
+        
+        free(data);
+        free(rotated_data);
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
 
 void miror_vertical(char* source_path) {
-    int largeur = 0, hauteur = 0, canaux = 0;
-    unsigned char *image_originale = NULL;
-    unsigned char *image_rotation = NULL;
+    int width = 0, height = 0, channels = 0;
+    unsigned char *data = NULL;
+    unsigned char *rotated_data = NULL;
 
-    // Lire l'image d'entrée
-    if (read_image_data(source_path, &image_originale, &largeur, &hauteur, &canaux)) {
-        int nouvelle_largeur = largeur;
-        int nouvelle_hauteur = hauteur;
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int new_width = width;
+        int new_height = height;
 
-        // Allouer de la mémoire pour l'image tournée
-        image_rotation = (unsigned char*)malloc(nouvelle_largeur * nouvelle_hauteur * canaux);
-        if (image_rotation == NULL) {
-            printf("Erreur : impossible d'allouer la mémoire pour l'image tournée.\n");
-            free(image_originale);
+        
+        rotated_data = (unsigned char *)malloc(new_width * new_height * channels);
+        if (!rotated_data) {
+            printf("Erreur : échec d'allocation mémoire.\n");
+            free(data);
             return;
         }
 
-        
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
-               
-                int index_original = (i * largeur + j) * canaux;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                
+                struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
 
-                // Nouvelle position après rotation
-                int x = nouvelle_largeur - 1 - j;
-                int y = j;
-
-                // Calculer l'index du pixel dans l'image tournée
-                int index_rotation = (y * nouvelle_largeur + x) * canaux;
+                int new_x = new_height - 1 - x;
+                int new_y = y;
 
                 
-                for (int c = 0; c < canaux; c++) {
-                    image_rotation[index_rotation + c] = image_originale[index_original + c];
-                }
+                struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
+
+                
+                dst_pixel->R = src_pixel->R;
+                dst_pixel->G = src_pixel->G;
+                dst_pixel->B = src_pixel->B;
             }
         }
 
-        // Sauvegarder l'image tournée
-        write_image_data("image_out.bmp", image_rotation, nouvelle_largeur, nouvelle_hauteur);
+        write_image_data("image_out.bmp", rotated_data, new_width, new_height);
 
-        // Libérer la mémoire
-        free(image_originale);
-        free(image_rotation);
+        
+        free(data);
+        free(rotated_data);
     } else {
-        printf("Erreur : Impossible de lire l'image.\n");
+        printf("Erreur : Impossible de lire l'image\n");
     }
 }
 
@@ -457,6 +451,45 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
             }
         }
         write_image_data ("image_out_gray.bmp", data, width, height);
+        free(data); // Libère la mémoire après usage
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+
+}
+
+void color_desaturate (char*source_path) {
+int width = 0, height = 0, channels = 0, x=0, y=0;
+unsigned char *data = NULL;
+struct pixelRGB *pixel = NULL;
+unsigned char value;
+
+
+if (read_image_data(source_path, &data, &width, &height, &channels)) {
+       for (x=0; x<width; x++){
+            for (y=0; y<height; y++){
+                pixel = get_pixel(data, width, height, channels, x, y);
+
+                unsigned char R = pixel->R;
+                unsigned char G = pixel->G;
+                unsigned char B = pixel->B;
+
+                unsigned char max_val = R;
+                if (G > max_val) max_val = G;
+                if (B > max_val) max_val = B;
+
+                unsigned char min_val = R;
+                if (G < min_val) min_val = G;
+                if (B < min_val) min_val = B;
+
+                unsigned char value = (max_val + min_val) / 2;
+
+                pixel->B=value;
+                pixel->R=value; 
+                pixel->G=value;               
+            }
+        }
+        write_image_data ("image_out.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
     } else {
         printf("Erreur : Impossible de lire l'image\n");
