@@ -743,3 +743,49 @@ void calculate_min_component(char *source_path, char component, int *x, int *y, 
         free(data);
     }
 }
+void stat_report(char *source_path) {
+    // Créer le nom du fichier de sortie
+    FILE *file = fopen("stat_report.txt", "w");
+    if (!file) {
+        printf("Erreur : Impossible de créer le fichier stat_report.txt\n");
+        return;
+    }
+    
+    // Variables pour stocker les résultats
+    int x, y, r, g, b, value;
+    
+    // Calculer max_pixel
+    calculate_max_pixel(source_path, &x, &y, &r, &g, &b);
+    fprintf(file, "max_pixel (%d, %d): %d, %d, %d\n\n", x, y, r, g, b);
+    
+    // Calculer min_pixel
+    calculate_min_pixel(source_path, &x, &y, &r, &g, &b);
+    fprintf(file, "min_pixel (%d, %d): %d, %d, %d\n\n", x, y, r, g, b);
+    
+    // Calculer max_component R
+    calculate_max_component(source_path, 'R', &x, &y, &value);
+    fprintf(file, "max_component R (%d, %d): %d\n\n", x, y, value);
+    
+    // Calculer max_component G
+    calculate_max_component(source_path, 'G', &x, &y, &value);
+    fprintf(file, "max_component G (%d, %d): %d\n\n", x, y, value);
+    
+    // Calculer max_component B
+    calculate_max_component(source_path, 'B', &x, &y, &value);
+    fprintf(file, "max_component B (%d, %d): %d\n\n", x, y, value);
+    
+    // Calculer min_component R
+    calculate_min_component(source_path, 'R', &x, &y, &value);
+    fprintf(file, "min_component R (%d, %d): %d\n\n", x, y, value);
+    
+    // Calculer min_component G
+    calculate_min_component(source_path, 'G', &x, &y, &value);
+    fprintf(file, "min_component G (%d, %d): %d\n\n", x, y, value);
+    
+    // Calculer min_component B
+    calculate_min_component(source_path, 'B', &x, &y, &value);
+    fprintf(file, "min_component B (%d, %d): %d\n", x, y, value);
+    
+    fclose(file);
+    printf("Rapport statistique généré dans 'stat_report.txt'\n");
+}
