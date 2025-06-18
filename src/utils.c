@@ -33,12 +33,20 @@ void print_pixel(char *filename, int x, int y) {
     }
 
    
+<<<<<<< HEAD
     
     if (pixel == NULL){
         printf("Erreur : pixel hors limites %p de longueur: %d et de hauteur: %d\n", pixel,width,height);
     } else {
         printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
     }
+=======
+  if (pixel == NULL){
+    printf("Erreur : pixel hors limites (%d, %d) pour image de largeur: %d et de hauteur: %d\n", x, y, width, height);
+} else {
+    printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+}
+>>>>>>> JEANNE
     return;
     free(data);
 }

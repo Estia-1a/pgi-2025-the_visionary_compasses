@@ -16,4 +16,7 @@ void color_blue (char*source_path);
 void color_gray (char*source_path);
 void color_gray_luminance (char*source_path);
 void miror_total (char*source_path);
+void max_pixel(char *source_path);
+void min_component(char *source_path, char component);
+void min_pixel(char *source_path);
 #endif
