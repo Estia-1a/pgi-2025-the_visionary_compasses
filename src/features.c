@@ -683,3 +683,33 @@ void calculate_min_pixel(char *source_path, int *x, int *y, int *r, int *g, int 
         free(data);
     }
 }
+void calculate_max_component(char *source_path, char component, int *x, int *y, int *value) {
+    int width, height, channels;
+    unsigned char *data;
+    
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        int max_value = -1;
+        *x = 0; *y = 0;
+        
+        int component_offset;
+        switch (component) {
+            case 'R': component_offset = 0; break;
+            case 'G': component_offset = 1; break;
+            case 'B': component_offset = 2; break;
+        }
+        
+        for (int py = 0; py < height; py++) {
+            for (int px = 0; px < width; px++) {
+                int index = (py * width + px) * channels;
+                unsigned char current_component = data[index + component_offset];
+                
+                if (current_component > max_value) {
+                    max_value = current_component;
+                    *x = px; *y = py;
+                }
+            }
+        }
+        *value = max_value;
+        free(data);
+    }
+}
