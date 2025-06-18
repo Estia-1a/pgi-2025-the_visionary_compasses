@@ -136,6 +136,23 @@ if (strncmp(configuration.command, "min_component", 13) == 0) {
     }
     min_component(configuration.filenames[0], component);
 }
+if (strncmp(configuration.command, "max_component", 13) == 0) {
+    if (configuration.arguments[0] == NULL) {
+        printf("Usage: freud.exe -f <image> -c max_component <R|G|B>\n");
+        printf("Exemple: freud.exe -f image.jpeg -c max_component R\n");
+        return 1;
+    }
+    
+    // Vérifier que l'argument est valide (R, G, ou B)
+    char component = configuration.arguments[0][0]; // Premier caractère
+    if (component != 'R' && component != 'G' && component != 'B') {
+        printf("Erreur: Composant invalide '%s'. Utilisez R, G ou B\n", configuration.arguments[0]);
+        return 1;
+    }
+    
+    // Appeler la fonction
+    max_component(configuration.filenames[0], component);
+}
 }
 
 
