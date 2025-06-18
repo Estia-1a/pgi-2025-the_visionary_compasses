@@ -606,4 +606,29 @@ void max_component(char *source_path, char component) {
             case 'G': component_offset = 1; break;
             case 'B': component_offset = 2; break;
         }
+        // Parcourir tous les pixels de l'image
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Calculer l'index dans le tableau data
+                int index = (y * width + x) * channels;
+                
+                // Obtenir la valeur du composant choisi
+                unsigned char current_component = data[index + component_offset];
+                
+                // Vérifier si c'est le maximum (premier rencontré en cas d'égalité)
+                if (current_component > max_value) {
+                    max_value = current_component;
+                    max_x = x;
+                    max_y = y;
+                }
+            }
+        }
+        
+        printf("max_component %c (%d, %d): %d\n", component, max_x, max_y, max_value);
+        
+        free(data);
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
+}
 }
