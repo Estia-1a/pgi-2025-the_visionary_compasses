@@ -561,9 +561,4 @@ void min_component(char *source_path, char component) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
-<<<<<<< HEAD
-=======
     
-=======
->>>>>>> min_pixel
->>>>>>> JEANNE
