@@ -336,7 +336,6 @@ void max_pixel(char *source_path) {
         printf("max_pixel (%d, %d): %d, %d, %d\n", max_x, max_y, max_R, max_G, max_B);
         
         free(data); // Libérer la mémoire
->>>>>>> JEANNE
     } else {
         printf("Erreur : Impossible de lire l'image\n");
     }
