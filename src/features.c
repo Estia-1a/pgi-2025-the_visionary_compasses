@@ -255,41 +255,45 @@ void miror_horizontal(char* source_path) {
     int width = 0, height = 0, channels = 0;
     unsigned char *data = NULL;
     unsigned char *rotated_data = NULL;
-
+ 
     if (read_image_data(source_path, &data, &width, &height, &channels)) {
         int new_width = width;
         int new_height = height;
-
-        
+ 
+       
         rotated_data = (unsigned char *)malloc(new_width * new_height * channels);
         if (!rotated_data) {
             printf("Erreur : échec d'allocation mémoire.\n");
             free(data);
             return;
         }
-
-        
-        for (int i = 0; i < hauteur; i++) {
-            for (int j = 0; j < largeur; j++) {
+ 
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                
-                int index_original = (i * largeur + j) * canaux;
-
-                // Nouvelle position après rotation
-                int x = i;
-                int y = nouvelle_hauteur - 1 - i;
-
-                // Calculer l'index du pixel dans l'image tournée
-                int index_rotation = (y * nouvelle_largeur + x) * canaux;
-
-                
-                for (int c = 0; c < canaux; c++) {
-                    image_rotation[index_rotation + c] = image_originale[index_original + c];
-                }
+                struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
+ 
+                int new_x = y;
+                int new_y = new_height - 1 - y;
+ 
+               
+                struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
+ 
+               
+                dst_pixel->R = src_pixel->R;
+                dst_pixel->G = src_pixel->G;
+                dst_pixel->B = src_pixel->B;
             }
         }
-        write_image_data ("image_out_gray.bmp", data, width, height);
-        free(data); // Libère la mémoire après usage
-}
+ 
+        write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+ 
+       
+        free(data);
+        free(rotated_data);
+    } else {
+        printf("Erreur : Impossible de lire l'image\n");
+    }
 }
 
 void max_pixel(char *source_path) {
