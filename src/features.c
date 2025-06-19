@@ -921,3 +921,122 @@ void scale_nearest(const char* source_path, float scale) {
     free(data_out);
     
 }
+
+void scale_bilinear(const char* source_path, float scale) {
+    int width = 0, height = 0, channels = 0;
+    unsigned char *data = NULL;
+    unsigned char *output_data = NULL;
+
+    // Charger l'image d'entrée
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        // Calculer les nouvelles dimensions
+        int new_width = (int)(width * scale);
+        int new_height = (int)(height * scale);
+        
+        printf("Image originale : %d x %d\n", width, height);
+        printf("Image redimensionnée : %d x %d (facteur: %.2f)\n", new_width, new_height, scale);
+
+        // Allouer la mémoire pour l'image de sortie
+        output_data = (unsigned char*)malloc(new_width * new_height * channels);
+        if (!output_data) {
+            printf("Erreur : échec d'allocation mémoire pour l'image de sortie.\n");
+            free(data);
+            return;
+        }
+
+        // Appliquer l'interpolation bilinéaire
+        for (int y = 0; y < new_height; y++) {
+            for (int x = 0; x < new_width; x++) {
+                // Mapper les coordonnées vers l'image originale
+                double src_x = (double)x / scale;
+                double src_y = (double)y / scale;
+                
+                // Obtenir le pixel interpolé
+                struct pixelRGB interpolated = bilinear_interpolate_pixel(data, width, height, channels, src_x, src_y);
+                
+                // Stocker le pixel dans l'image de sortie
+                struct pixelRGB *dst_pixel = get_pixel(output_data, new_width, new_height, channels, x, y);
+                if (dst_pixel) {
+                    dst_pixel->R = interpolated.R;
+                    dst_pixel->G = interpolated.G;
+                    dst_pixel->B = interpolated.B;
+                }
+            }
+        }
+
+        // Sauvegarder l'image redimensionnée
+        write_image_data("image_out.bmp", output_data, new_width, new_height);
+        
+        printf("Redimensionnement bilinéaire terminé. Image sauvegardée : image_out.bmp\n");
+
+        // Libérer la mémoire
+        free(data);
+        free(output_data);
+    } else {
+        printf("Erreur : Impossible de lire l'image %s\n", source_path);
+    }
+}
+
+// Fonction utilitaire pour l'interpolation bilinéaire d'un pixel
+struct pixelRGB bilinear_interpolate_pixel(unsigned char* data, int width, int height, int channels, double x, double y) {
+    struct pixelRGB result = {0, 0, 0};
+    
+    // Gérer les cas de bord
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x >= width - 1) x = width - 1;
+    if (y >= height - 1) y = height - 1;
+    
+    // Coordonnées des pixels voisins
+    int x1 = (int)x;
+    int y1 = (int)y;
+    int x2 = x1 + 1;
+    int y2 = y1 + 1;
+    
+    // S'assurer qu'on reste dans les limites
+    if (x2 >= width) x2 = width - 1;
+    if (y2 >= height) y2 = height - 1;
+    
+    // Facteurs d'interpolation
+    double dx = x - x1;
+    double dy = y - y1;
+    
+    // Obtenir les pixels aux quatre coins
+    struct pixelRGB *p11 = get_pixel(data, width, height, channels, x1, y1);
+    struct pixelRGB *p12 = get_pixel(data, width, height, channels, x1, y2);
+    struct pixelRGB *p21 = get_pixel(data, width, height, channels, x2, y1);
+    struct pixelRGB *p22 = get_pixel(data, width, height, channels, x2, y2);
+    
+    // Vérifier que tous les pixels sont valides
+    if (p11 && p12 && p21 && p22) {
+        // Interpolation bilinéaire pour chaque canal
+        result.R = (unsigned char)(
+            p11->R * (1 - dx) * (1 - dy) +
+            p21->R * dx * (1 - dy) +
+            p12->R * (1 - dx) * dy +
+            p22->R * dx * dy + 0.5
+        );
+        
+        result.G = (unsigned char)(
+            p11->G * (1 - dx) * (1 - dy) +
+            p21->G * dx * (1 - dy) +
+            p12->G * (1 - dx) * dy +
+            p22->G * dx * dy + 0.5
+        );
+        
+        result.B = (unsigned char)(
+            p11->B * (1 - dx) * (1 - dy) +
+            p21->B * dx * (1 - dy) +
+            p12->B * (1 - dx) * dy +
+            p22->B * dx * dy + 0.5
+        );
+    } else {
+        // Si on ne peut pas accéder aux pixels, utilise le pixel le plus proche
+        struct pixelRGB *nearest = get_pixel(data, width, height, channels, (int)(x + 0.5), (int)(y + 0.5));
+        if (nearest) {
+            result = *nearest;
+        }
+    }
+    
+    return result;
+}
