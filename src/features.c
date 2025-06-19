@@ -187,7 +187,7 @@ void rotate_cw(char* source_path) {
                 int index_original = (i * largeur + j) * canaux;
 
                 // Nouvelle position après rotation
-                int x = nouvelle_hauteur - 1 - j;
+                int x = nouvelle_hauteur - 1 - i;
                 int y = j;
 
                 // Calculer l'index du pixel dans l'image tournée
