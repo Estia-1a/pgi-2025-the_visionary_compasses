@@ -179,6 +179,24 @@ if ( strncmp( configuration.command, "scale_nearest", 9 ) == 0 ) {
     scale_nearest(configuration.filenames[0], 3.0f);
 }
 
+if (strncmp(configuration.command, "scale_bilinear", 14) == 0) {
+    if (configuration.arguments[0] == NULL) {
+        printf("Usage: freud.exe -f <image> -c scale_bilinear <scale_factor>\n");
+        printf("Exemple: freud.exe -f image.jpeg -c scale_bilinear 3\n");
+        return 1;
+    }
+    
+    // Convertir l'argument en float
+    float scale_factor = atof(configuration.arguments[0]);
+    
+    if (scale_factor <= 0) {
+        printf("Erreur: Le facteur d'échelle doit être positif (reçu: %f)\n", scale_factor);
+        return 1;
+    }
+    
+    // Appeler la fonction
+    scale_bilinear(configuration.filenames[0], scale_factor);
+}
 }
 
 
