@@ -27,4 +27,5 @@ void min_pixel(char *source_path);
 void max_component(char *source_path, char component);
 void stat_report(char *source_path);
 void scale_nearest (const char* source_path, float scale);
+void scale_bilinear(const char* source_path, float scale);
 #endif
