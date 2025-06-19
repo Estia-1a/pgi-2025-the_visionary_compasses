@@ -595,7 +595,6 @@ void color_desaturate (char*source_path) {
 int width = 0, height = 0, channels = 0, x=0, y=0;
 unsigned char *data = NULL;
 struct pixelRGB *pixel = NULL;
-unsigned char value = 0;
 
 
 if (read_image_data(source_path, &data, &width, &height, &channels)) {
