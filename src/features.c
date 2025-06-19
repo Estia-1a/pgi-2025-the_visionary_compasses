@@ -476,8 +476,8 @@ void miror_total(char* source_path) {
                 int index_original = (i * largeur + j) * canaux;
 
                 // Nouvelle position après rotation
-                int x = nouvelle_largeur - 1 - i;
-                int y = nouvelle_hauteur -1 -j;
+                int x = nouvelle_largeur - 1 - j;
+                int y = nouvelle_hauteur -1 - i;
 
                 // Calculer l'index du pixel dans l'image tournée
                 int index_rotation = (y * nouvelle_largeur + x) * canaux;
