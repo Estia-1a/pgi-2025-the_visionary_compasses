@@ -1,0 +1,35 @@
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c: In function ‘main’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:162:68: warning: passing argument 2 of ‘print_pixel’ makes integer from pointer without a cast [-Wint-conversion]
+  162 |     print_pixel(configuration.filenames[0], configuration.filenames[0], configuration.filenames[0]);
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+      |                                                                    |
+      |                                                                    char *
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:11:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.h:20:38: note: expected ‘int’ but argument is of type ‘char *’
+   20 | void print_pixel(char *filename, int x, int y);
+      |                                  ~~~~^
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:162:96: warning: passing argument 3 of ‘print_pixel’ makes integer from pointer without a cast [-Wint-conversion]
+  162 |     print_pixel(configuration.filenames[0], configuration.filenames[0], configuration.filenames[0]);
+      |                                                                         ~~~~~~~~~~~~~~~~~~~~~~~^~~
+      |                                                                                                |
+      |                                                                                                char *
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.h:20:45: note: expected ‘int’ but argument is of type ‘char *’
+   20 | void print_pixel(char *filename, int x, int y);
+      |                                         ~~~~^
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c: In function ‘scale_nearest’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:847:5: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  847 |     fread(header, sizeof(unsigned char), 54, file_in);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:874:5: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  874 |     fread(data_in, sizeof(unsigned char), size_in, file_in);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:2:
+In function ‘atoi’,
+    inlined from ‘main’ at /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:56:13:
+/usr/include/stdlib.h:483:16: warning: argument 1 null where non-null expected [-Wnonnull]
+  483 |   return (int) strtol (__nptr, (char **) NULL, 10);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/stdlib.h: In function ‘main’:
+/usr/include/stdlib.h:177:17: note: in a call to function ‘strtol’ declared ‘nonnull’
+  177 | extern long int strtol (const char *__restrict __nptr,
+      |                 ^~~~~~
