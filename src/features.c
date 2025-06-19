@@ -833,4 +833,65 @@ void stat_report(char *source_path) {
 }
 
 
+void scale_nearest(const char* source_path, float scale) {
+    FILE* file_in = fopen(source_path, "rb");
+    if (!file_in) {
+        printf("Erreur : impossible d’ouvrir %s\n", source_path);
+        return;
+    }
+
+    unsigned char header[54];
+    fread(header, sizeof(unsigned char), 54, file_in);
+
+    int width = *(int*)&header[18];
+    int height = *(int*)&header[22];
+    int padding_in = (4 - (width * 3) % 4) % 4;
+
+    int new_width = (int)(width * scale);
+    int new_height = (int)(height * scale);
+    int padding_out = (4 - (new_width * 3) % 4) % 4;
+
+    int size_in = (width * 3 + padding_in) * height;
+    int size_out = (new_width * 3 + padding_out) * new_height;
+
+    unsigned char* data_in = malloc(size_in);
+    unsigned char* data_out = calloc(size_out, sizeof(unsigned char)); // zero-filled for padding
+
+    if (!data_in || !data_out) {
+        printf("Erreur allocation mémoire\n");
+        fclose(file_in);
+        free(data_in);
+        free(data_out);
+        return;
+    }
+
+    fread(data_in, sizeof(unsigned char), size_in, file_in);
+    fclose(file_in);
+
+    for (int y = 0; y < new_height; y++) {
+        for (int x = 0; x < new_width; x++) {
+            int src_x = (int)(x / scale);
+            int src_y = (int)(y / scale);
+
+            struct pixelRGB* src = get_pixel(data_in, width, height, 3, src_x, src_y);
+            struct pixelRGB* dst = get_pixel(data_out, new_width, new_height, 3, x, y);
+
+            if (src && dst) {
+                *dst = *src;
+            }
+        }
+    }
+
+    // Mise à jour de l'en-tête BMP
+    *(int*)&header[18] = new_width;
+    *(int*)&header[22] = new_height;
+    *(int*)&header[34] = size_out;
+    *(int*)&header[2] = size_out + 54;
+
+    // Écriture de l'image via write_image_data
+    fwrite("image_out.bmp", header, data_out, new_width, new_height);
+
+    free(data_in);
+    free(data_out);
+}
 

@@ -159,7 +159,7 @@ if ( strncmp( configuration.command, "stat_report", 11 ) == 0 ) {
 }
 
 if ( strncmp( configuration.command, "print_pixel", 11 ) == 0 ) {
-    print_pixel(configuration.filenames[0]);
+    print_pixel(configuration.filenames[0], configuration.filenames[0], configuration.filenames[0]);
 }
 
 if ( strncmp( configuration.command, "max_pixel", 11 ) == 0 ) {
