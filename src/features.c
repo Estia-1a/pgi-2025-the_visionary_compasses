@@ -922,63 +922,8 @@ void scale_nearest(const char* source_path, float scale) {
     
 }
 
-void scale_bilinear(const char* source_path, float scale) {
-    int width = 0, height = 0, channels = 0;
-    unsigned char *data = NULL;
-    unsigned char *output_data = NULL;
-
-    // Charger l'image d'entrée
-    if (read_image_data(source_path, &data, &width, &height, &channels)) {
-        // Calculer les nouvelles dimensions
-        int new_width = (int)(width * scale);
-        int new_height = (int)(height * scale);
-        
-        printf("Image originale : %d x %d\n", width, height);
-        printf("Image redimensionnée : %d x %d (facteur: %.2f)\n", new_width, new_height, scale);
-
-        // Allouer la mémoire pour l'image de sortie
-        output_data = (unsigned char*)malloc(new_width * new_height * channels);
-        if (!output_data) {
-            printf("Erreur : échec d'allocation mémoire pour l'image de sortie.\n");
-            free(data);
-            return;
-        }
-
-        // Appliquer l'interpolation bilinéaire
-        for (int y = 0; y < new_height; y++) {
-            for (int x = 0; x < new_width; x++) {
-                // Mapper les coordonnées vers l'image originale
-                double src_x = (double)x / scale;
-                double src_y = (double)y / scale;
-                
-                // Obtenir le pixel interpolé
-                struct pixelRGB interpolated = bilinear_interpolate_pixel(data, width, height, channels, src_x, src_y);
-                
-                // Stocker le pixel dans l'image de sortie
-                struct pixelRGB *dst_pixel = get_pixel(output_data, new_width, new_height, channels, x, y);
-                if (dst_pixel) {
-                    dst_pixel->R = interpolated.R;
-                    dst_pixel->G = interpolated.G;
-                    dst_pixel->B = interpolated.B;
-                }
-            }
-        }
-
-        // Sauvegarder l'image redimensionnée
-        write_image_data("image_out.bmp", output_data, new_width, new_height);
-        
-        printf("Redimensionnement bilinéaire terminé. Image sauvegardée : image_out.bmp\n");
-
-        // Libérer la mémoire
-        free(data);
-        free(output_data);
-    } else {
-        printf("Erreur : Impossible de lire l'image %s\n", source_path);
-    }
-}
-
 // Fonction utilitaire pour l'interpolation bilinéaire d'un pixel
-struct pixelRGB bilinear_interpolate_pixel(unsigned char* data, int width, int height, int channels, double x, double y) {
+static struct pixelRGB interpolate_bilinear_pixel(unsigned char* data, int width, int height, int channels, double x, double y) {
     struct pixelRGB result = {0, 0, 0};
     
     // Gérer les cas de bord
@@ -1031,7 +976,7 @@ struct pixelRGB bilinear_interpolate_pixel(unsigned char* data, int width, int h
             p22->B * dx * dy + 0.5
         );
     } else {
-        // Si on ne peut pas accéder aux pixels, utilise le pixel le plus proche
+        // Si on ne peut pas accéder aux pixels, utiliser le pixel le plus proche
         struct pixelRGB *nearest = get_pixel(data, width, height, channels, (int)(x + 0.5), (int)(y + 0.5));
         if (nearest) {
             result = *nearest;
@@ -1039,4 +984,59 @@ struct pixelRGB bilinear_interpolate_pixel(unsigned char* data, int width, int h
     }
     
     return result;
+}
+
+void scale_bilinear(const char* source_path, float scale) {
+    int width = 0, height = 0, channels = 0;
+    unsigned char *data = NULL;
+    unsigned char *output_data = NULL;
+
+    // Charger l'image d'entrée
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        // Calculer les nouvelles dimensions
+        int new_width = (int)(width * scale);
+        int new_height = (int)(height * scale);
+        
+        printf("Image originale : %d x %d\n", width, height);
+        printf("Image redimensionnée : %d x %d (facteur: %.2f)\n", new_width, new_height, scale);
+
+        // Allouer la mémoire pour l'image de sortie
+        output_data = (unsigned char*)malloc(new_width * new_height * channels);
+        if (!output_data) {
+            printf("Erreur : échec d'allocation mémoire pour l'image de sortie.\n");
+            free(data);
+            return;
+        }
+
+        // Appliquer l'interpolation bilinéaire
+        for (int y = 0; y < new_height; y++) {
+            for (int x = 0; x < new_width; x++) {
+                // Mapper les coordonnées vers l'image originale
+                double src_x = (double)x / scale;
+                double src_y = (double)y / scale;
+                
+                // Obtenir le pixel interpolé
+                struct pixelRGB interpolated = interpolate_bilinear_pixel(data, width, height, channels, src_x, src_y);
+                
+                // Stocker le pixel dans l'image de sortie
+                struct pixelRGB *dst_pixel = get_pixel(output_data, new_width, new_height, channels, x, y);
+                if (dst_pixel) {
+                    dst_pixel->R = interpolated.R;
+                    dst_pixel->G = interpolated.G;
+                    dst_pixel->B = interpolated.B;
+                }
+            }
+        }
+
+        // Sauvegarder l'image redimensionnée
+        write_image_data("image_out.bmp", output_data, new_width, new_height);
+        
+        printf("Redimensionnement bilinéaire terminé. Image sauvegardée : image_out.bmp\n");
+
+        // Libérer la mémoire
+        free(data);
+        free(output_data);
+    } else {
+        printf("Erreur : Impossible de lire l'image %s\n", source_path);
+    }
 }
