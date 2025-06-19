@@ -407,8 +407,8 @@ void miror_vertical(char* source_path) {
                 
                 struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
 
-                int new_x = new_height - 1 - x;
-                int new_y = y;
+                int new_x =  x;
+                int new_y = height -1- y;
 
                 
                 struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
