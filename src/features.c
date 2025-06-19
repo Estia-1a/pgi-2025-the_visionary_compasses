@@ -274,8 +274,9 @@ void miror_horizontal(char* source_path) {
                
                 struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, x, y);
  
-                int new_x = y;
-                int new_y = new_height - 1 - y;
+                int new_x = width - 1 - x;
+                int new_y = y;
+
  
                
                 struct pixelRGB *dst_pixel = get_pixel(rotated_data, new_width, new_height, channels, new_x, new_y);
