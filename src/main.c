@@ -105,21 +105,18 @@ if ( strncmp( configuration.command, "rotate_cw", 9 ) == 0 ) {
     rotate_cw( configuration.filenames[0] );
 }
 if ( strncmp( configuration.command, "rotate_acw", 9 ) == 0 ) {
-    /* dimension() function is defined in feature.h and implemented in feature.c */
     rotate_acw( configuration.filenames[0] );
 }
 
 if ( strncmp( configuration.command, "miror_horizontal", 9 ) == 0 ) {
-    /* dimension() function is defined in feature.h and implemented in feature.c */
     miror_horizontal( configuration.filenames[0] );
 }
 
 if ( strncmp( configuration.command, "miror_vertical", 9 ) == 0 ) {
-    /* dimension() function is defined in feature.h and implemented in feature.c */
     miror_vertical( configuration.filenames[0] );
 }
 if ( strncmp( configuration.command, "color_desaturate", 9 ) == 0 ) {
-    /* dimension() function is defined in feature.h and implemented in feature.c */
+   
     color_desaturate( configuration.filenames[0] );
 }
 if (strncmp(configuration.command, "min_component", 13) == 0) {
@@ -143,14 +140,14 @@ if (strncmp(configuration.command, "max_component", 13) == 0) {
         return 1;
     }
     
-    // Vérifier que l'argument est valide (R, G, ou B)
-    char component = configuration.arguments[0][0]; // Premier caractère
+
+    char component = configuration.arguments[0][0]; 
     if (component != 'R' && component != 'G' && component != 'B') {
         printf("Erreur: Composant invalide '%s'. Utilisez R, G ou B\n", configuration.arguments[0]);
         return 1;
     }
     
-    // Appeler la fonction
+ 
     max_component(configuration.filenames[0], component);
 }
 
@@ -167,7 +164,7 @@ if ( strncmp( configuration.command, "max_pixel", 11 ) == 0 ) {
 }
 
 if ( strncmp( configuration.command, "dimension", 9 ) == 0 ) {
-    /* dimension() function is defined in feature.h and implemented in feature.c */
+    
     dimension( configuration.filenames[0] );
 }
 
@@ -186,7 +183,7 @@ if (strncmp(configuration.command, "scale_bilinear", 14) == 0) {
         return 1;
     }
     
-    // Convertir l'argument en float
+
     float scale_factor = atof(configuration.arguments[0]);
     
     if (scale_factor <= 0) {
@@ -194,8 +191,32 @@ if (strncmp(configuration.command, "scale_bilinear", 14) == 0) {
         return 1;
     }
     
-    // Appeler la fonction
+ 
     scale_bilinear(configuration.filenames[0], scale_factor);
+}
+if (strncmp(configuration.command, "scale_crop", 10) == 0) {
+    
+    if (configuration.arguments[0] == NULL || configuration.arguments[1] == NULL || 
+        configuration.arguments[2] == NULL || configuration.arguments[3] == NULL) {
+        printf("Usage: freud.exe -f <image> -c scale_crop <center_x> <center_y> <width> <height>\n");
+        printf("Exemple: freud.exe -f image.jpeg -c scale_crop 500 600 300 400\n");
+        return 1;
+    }
+    
+
+    int center_x = atoi(configuration.arguments[0]);
+    int center_y = atoi(configuration.arguments[1]);
+    int crop_width = atoi(configuration.arguments[2]);
+    int crop_height = atoi(configuration.arguments[3]);
+    
+  
+    if (crop_width <= 0 || crop_height <= 0) {
+        printf("Erreur: La largeur et la hauteur doivent être positives\n");
+        printf("Reçu: largeur=%d, hauteur=%d\n", crop_width, crop_height);
+        return 1;
+    }
+
+    scale_crop(configuration.filenames[0], center_x, center_y, crop_width, crop_height);
 }
 }
 

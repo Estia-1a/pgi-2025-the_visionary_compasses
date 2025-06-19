@@ -1040,3 +1040,75 @@ void scale_bilinear(const char* source_path, float scale) {
         printf("Erreur : Impossible de lire l'image %s\n", source_path);
     }
 }
+
+void scale_crop(const char* source_path, int center_x, int center_y, int crop_width, int crop_height) {
+    int width = 0, height = 0, channels = 0;
+    unsigned char *data = NULL;
+    unsigned char *output_data = NULL;
+
+    // Charger l'image d'entrée
+    if (read_image_data(source_path, &data, &width, &height, &channels)) {
+        printf("Image originale : %d x %d\n", width, height);
+        printf("Centre de crop : (%d, %d)\n", center_x, center_y);
+        printf("Taille du crop : %d x %d\n", crop_width, crop_height);
+
+       
+        output_data = (unsigned char*)malloc(crop_width * crop_height * channels);
+        if (!output_data) {
+            printf("Erreur : échec d'allocation mémoire pour l'image de sortie.\n");
+            free(data);
+            return;
+        }
+
+        
+        int start_x = center_x - crop_width / 2;
+        int start_y = center_y - crop_height / 2;
+
+        printf("Coin supérieur gauche du crop : (%d, %d)\n", start_x, start_y);
+
+        
+        for (int y = 0; y < crop_height; y++) {
+            for (int x = 0; x < crop_width; x++) {
+                // Calculer les coordonnées dans l'image source
+                int src_x = start_x + x;
+                int src_y = start_y + y;
+                
+                struct pixelRGB *dst_pixel = get_pixel(output_data, crop_width, crop_height, channels, x, y);
+                
+                if (dst_pixel) {
+                    
+                    if (src_x >= 0 && src_x < width && src_y >= 0 && src_y < height) {
+                       
+                        struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, src_x, src_y);
+                        if (src_pixel) {
+                            dst_pixel->R = src_pixel->R;
+                            dst_pixel->G = src_pixel->G;
+                            dst_pixel->B = src_pixel->B;
+                        } else {
+                   
+                            dst_pixel->R = 0;
+                            dst_pixel->G = 0;
+                            dst_pixel->B = 0;
+                        }
+                    } else {
+                      
+                        dst_pixel->R = 0;
+                        dst_pixel->G = 0;
+                        dst_pixel->B = 0;
+                    }
+                }
+            }
+        }
+
+    
+        write_image_data("image_out.bmp", output_data, crop_width, crop_height);
+        
+        printf("Crop terminé. Image sauvegardée : image_out.bmp (%d x %d)\n", crop_width, crop_height);
+
+    
+        free(data);
+        free(output_data);
+    } else {
+        printf("Erreur : Impossible de lire l'image %s\n", source_path);
+    }
+}
