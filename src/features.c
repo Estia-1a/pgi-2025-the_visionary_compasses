@@ -20,7 +20,7 @@ void dimension (char *source_path){
 
     unsigned char *data; 
     if (read_image_data(source_path, &data, &width, &height, &channels)){
-        printf("dimensions : %d, %d \n", width, height);
+        printf("dimension: %d, %d\n", width, height);
 
     }
     else {
@@ -514,7 +514,7 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
                 pixel->G=av;               
             }
         }
-        write_image_data ("image_out_gray.bmp", data, width, height);
+        write_image_data ("image_out.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
     } else {
         printf("Erreur : Impossible de lire l'image\n");
@@ -538,7 +538,7 @@ if (read_image_data(source_path, &data, &width, &height, &channels)) {
                 pixel->G=value;               
             }
         }
-        write_image_data ("image_out_gray.bmp", data, width, height);
+        write_image_data ("image_out.bmp", data, width, height);
         free(data); // Libère la mémoire après usage
 }
 }
@@ -591,6 +591,7 @@ void min_component(char *source_path, char component) {
         printf("Erreur : Impossible de lire l'image\n");
     }
 }
+
 void color_desaturate (char*source_path) {
 int width = 0, height = 0, channels = 0, x=0, y=0;
 unsigned char *data = NULL;
@@ -830,3 +831,6 @@ void stat_report(char *source_path) {
     fclose(file);
     printf("Rapport statistique généré dans 'stat_report.txt'\n");
 }
+
+
+
