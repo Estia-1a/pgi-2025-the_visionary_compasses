@@ -25,6 +25,7 @@ void dimension (char *source_path){
     }
     else {
         printf("Erreur : Impossible de lire l'image");
+        read_image_data(source_path, &data, &width, &height, &channels);
     }
 
 }
@@ -834,12 +835,14 @@ void stat_report(char *source_path) {
 
 
 void scale_nearest(const char* source_path, float scale) {
+    // Étape 1 : ouvrir le fichier image BMP
     FILE* file_in = fopen(source_path, "rb");
     if (!file_in) {
         printf("Erreur : impossible d’ouvrir %s\n", source_path);
         return;
     }
 
+    // Étape 2 : lecture de l'en-tête BMP
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, file_in);
 
@@ -847,6 +850,7 @@ void scale_nearest(const char* source_path, float scale) {
     int height = *(int*)&header[22];
     int padding_in = (4 - (width * 3) % 4) % 4;
 
+    // Étape 3 : nouvelles dimensions
     int new_width = (int)(width * scale);
     int new_height = (int)(height * scale);
     int padding_out = (4 - (new_width * 3) % 4) % 4;
@@ -854,8 +858,9 @@ void scale_nearest(const char* source_path, float scale) {
     int size_in = (width * 3 + padding_in) * height;
     int size_out = (new_width * 3 + padding_out) * new_height;
 
+    // Étape 4 : allocation mémoire
     unsigned char* data_in = malloc(size_in);
-    unsigned char* data_out = calloc(size_out, sizeof(unsigned char)); // zero-filled for padding
+    unsigned char* data_out = calloc(size_out, sizeof(unsigned char)); // zéro pour padding
 
     if (!data_in || !data_out) {
         printf("Erreur allocation mémoire\n");
@@ -865,9 +870,11 @@ void scale_nearest(const char* source_path, float scale) {
         return;
     }
 
+    // Étape 5 : lecture des pixels
     fread(data_in, sizeof(unsigned char), size_in, file_in);
     fclose(file_in);
 
+    // Étape 6 : redimensionnement nearest-neighbor
     for (int y = 0; y < new_height; y++) {
         for (int x = 0; x < new_width; x++) {
             int src_x = (int)(x / scale);
@@ -882,16 +889,35 @@ void scale_nearest(const char* source_path, float scale) {
         }
     }
 
-    // Mise à jour de l'en-tête BMP
+    // Étape 7 : mise à jour de l'en-tête BMP
     *(int*)&header[18] = new_width;
     *(int*)&header[22] = new_height;
     *(int*)&header[34] = size_out;
     *(int*)&header[2] = size_out + 54;
 
-    // Écriture de l'image via write_image_data
-    fwrite("image_out.bmp", header, data_out, new_width, new_height);
+    // Étape 8 : écriture de l’image redimensionnée
+    FILE* file_out = fopen("image_out.bmp", "wb");
+    if (!file_out) {
+        printf("Erreur : impossible de créer image_out.bmp\n");
+        free(data_in);
+        free(data_out);
+        return;
+    }
 
+    fwrite(header, sizeof(unsigned char), 54, file_out);
+
+    for (int y = 0; y < new_height; y++) {
+        fwrite(&data_out[y * new_width * 3], sizeof(unsigned char), new_width * 3, file_out);
+        for (int p = 0; p < padding_out; p++) {
+            fputc(0x00, file_out); // padding BMP
+        }
+    }
+
+    printf("Image originale : %d x %d\n", width, height);
+    printf("Image redimensionnée : %d x %d\n", new_width, new_height);
+
+    fclose(file_out);
     free(data_in);
     free(data_out);
+    
 }
-
