@@ -835,94 +835,6 @@ void stat_report(char *source_path) {
 }
 
 
-void scale_nearest(const char* source_path, float scale) {
-    // Étape 1 : ouvrir le fichier image BMP
-    FILE* file_in = fopen(source_path, "rb");
-    if (!file_in) {
-        printf("Erreur : impossible d’ouvrir %s\n", source_path);
-        return;
-    }
-
-    // Étape 2 : lecture de l'en-tête BMP
-    unsigned char header[54];
-    fread(header, sizeof(unsigned char), 54, file_in);
-
-    int width = *(int*)&header[18];
-    int height = *(int*)&header[22];
-    int padding_in = (4 - (width * 3) % 4) % 4;
-
-    // Étape 3 : nouvelles dimensions
-    int new_width = (int)(width * scale);
-    int new_height = (int)(height * scale);
-    int padding_out = (4 - (new_width * 3) % 4) % 4;
-
-    int size_in = (width * 3 + padding_in) * height;
-    int size_out = (new_width * 3 + padding_out) * new_height;
-
-    // Étape 4 : allocation mémoire
-    unsigned char* data_in = malloc(size_in);
-    unsigned char* data_out = calloc(size_out, sizeof(unsigned char)); // zéro pour padding
-
-    if (!data_in || !data_out) {
-        printf("Erreur allocation mémoire\n");
-        fclose(file_in);
-        free(data_in);
-        free(data_out);
-        return;
-    }
-
-    // Étape 5 : lecture des pixels
-    fread(data_in, sizeof(unsigned char), size_in, file_in);
-    fclose(file_in);
-
-    // Étape 6 : redimensionnement nearest-neighbor
-    for (int y = 0; y < new_height; y++) {
-        for (int x = 0; x < new_width; x++) {
-            int src_x = (int)(x / scale);
-            int src_y = (int)(y / scale);
-
-            struct pixelRGB* src = get_pixel(data_in, width, height, 3, src_x, src_y);
-            struct pixelRGB* dst = get_pixel(data_out, new_width, new_height, 3, x, y);
-
-            if (src && dst) {
-                *dst = *src;
-            }
-        }
-    }
-
-    // Étape 7 : mise à jour de l'en-tête BMP
-    *(int*)&header[18] = new_width;
-    *(int*)&header[22] = new_height;
-    *(int*)&header[34] = size_out;
-    *(int*)&header[2] = size_out + 54;
-
-    // Étape 8 : écriture de l’image redimensionnée
-    FILE* file_out = fopen("image_out.bmp", "wb");
-    if (!file_out) {
-        printf("Erreur : impossible de créer image_out.bmp\n");
-        free(data_in);
-        free(data_out);
-        return;
-    }
-
-    fwrite(header, sizeof(unsigned char), 54, file_out);
-
-    for (int y = 0; y < new_height; y++) {
-        fwrite(&data_out[y * new_width * 3], sizeof(unsigned char), new_width * 3, file_out);
-        for (int p = 0; p < padding_out; p++) {
-            fputc(0x00, file_out); // padding BMP
-        }
-    }
-
-    printf("Image originale : %d x %d\n", width, height);
-    printf("Image redimensionnée : %d x %d\n", new_width, new_height);
-
-    fclose(file_out);
-    free(data_in);
-    free(data_out);
-    
-}
-
 // Fonction utilitaire pour l'interpolation bilinéaire d'un pixel
 static struct pixelRGB interpolate_bilinear_pixel(unsigned char* data, int width, int height, int channels, double x, double y) {
     struct pixelRGB result = {0, 0, 0};
@@ -1110,3 +1022,204 @@ void scale_crop(const char* source_path, int center_x, int center_y, int crop_wi
     free(data);
     free(output_data);
 }
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+typedef struct {
+    int width;
+    int height;
+    int channels;
+    unsigned char* data;
+} Image;
+
+#pragma pack(push, 1)
+typedef struct {
+    uint16_t bfType;      // "BM"
+    uint32_t bfSize;
+    uint16_t bfReserved1;
+    uint16_t bfReserved2;
+    uint32_t bfOffBits;
+} BITMAPFILEHEADER;
+
+typedef struct {
+    uint32_t biSize;
+    int32_t  biWidth;
+    int32_t  biHeight;
+    uint16_t biPlanes;
+    uint16_t biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
+    int32_t  biXPelsPerMeter;
+    int32_t  biYPelsPerMeter;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
+} BITMAPINFOHEADER;
+#pragma pack(pop)
+
+// Charger une image BMP 24 bits non compressée
+Image* load_image(const char* filename) {
+    FILE* file = fopen(filename, "rb");
+    if (!file) {
+        printf("Erreur : impossible d'ouvrir %s\n", filename);
+        return NULL;
+    }
+
+    BITMAPFILEHEADER file_header;
+    fread(&file_header, sizeof(BITMAPFILEHEADER), 1, file);
+
+    if (file_header.bfType != 0x4D42) {
+        printf("Erreur : ce fichier n'est pas un BMP valide.\n");
+        fclose(file);
+        return NULL;
+    }
+
+    BITMAPINFOHEADER info_header;
+    fread(&info_header, sizeof(BITMAPINFOHEADER), 1, file);
+
+    if (info_header.biBitCount != 24 || info_header.biCompression != 0) {
+        printf("Erreur : seul le BMP 24 bits non compressé est supporté.\n");
+        fclose(file);
+        return NULL;
+    }
+
+    int width = info_header.biWidth;
+    int height = info_header.biHeight;
+    int channels = 3;
+
+    // Calcul du padding par ligne (BMP : lignes alignées sur 4 octets)
+    int padding = (4 - (width * channels) % 4) % 4;
+
+    unsigned char* data = malloc(width * height * channels);
+    if (!data) {
+        fclose(file);
+        return NULL;
+    }
+
+    fseek(file, file_header.bfOffBits, SEEK_SET);
+
+    // Lecture ligne par ligne (de bas en haut)
+    for (int y = height - 1; y >= 0; y--) {
+        for (int x = 0; x < width; x++) {
+            int index = (y * width + x) * channels;
+            fread(&data[index], 1, channels, file); // BGR
+        }
+        fseek(file, padding, SEEK_CUR); // saut du padding
+    }
+
+    fclose(file);
+
+    Image* img = malloc(sizeof(Image));
+    img->width = width;
+    img->height = height;
+    img->channels = channels;
+    img->data = data;
+
+    return img;
+}
+
+// Sauvegarder une image au format BMP 24 bits
+void save_image_bmp(const char* filename, Image* img) {
+    FILE* file = fopen(filename, "wb");
+    if (!file) {
+        printf("Erreur : impossible de créer %s\n", filename);
+        return;
+    }
+
+    int width = img->width;
+    int height = img->height;
+    int channels = img->channels;
+    int padding = (4 - (width * channels) % 4) % 4;
+    int row_size = width * channels + padding;
+
+    BITMAPFILEHEADER file_header = {
+        .bfType = 0x4D42,
+        .bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + row_size * height,
+        .bfReserved1 = 0,
+        .bfReserved2 = 0,
+        .bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)
+    };
+
+    BITMAPINFOHEADER info_header = {
+        .biSize = sizeof(BITMAPINFOHEADER),
+        .biWidth = width,
+        .biHeight = height,
+        .biPlanes = 1,
+        .biBitCount = 24,
+        .biCompression = 0,
+        .biSizeImage = row_size * height,
+        .biXPelsPerMeter = 0,
+        .biYPelsPerMeter = 0,
+        .biClrUsed = 0,
+        .biClrImportant = 0
+    };
+
+    fwrite(&file_header, sizeof(file_header), 1, file);
+    fwrite(&info_header, sizeof(info_header), 1, file);
+
+    unsigned char padding_bytes[3] = {0, 0, 0};
+
+    // Écriture ligne par ligne (de bas en haut)
+    for (int y = height - 1; y >= 0; y--) {
+        for (int x = 0; x < width; x++) {
+            int index = (y * width + x) * channels;
+            fwrite(&img->data[index], 1, channels, file); // BGR
+        }
+        fwrite(padding_bytes, 1, padding, file);
+    }
+
+    fclose(file);
+}
+
+// Libérer une image
+void free_image(Image* img) {
+    if (img) {
+        free(img->data);
+        free(img);
+    }
+}
+
+
+void scale_nearest(const char* filename, float scale) {     // Charger l'image d'entrée
+typedef struct {
+    int width;
+    int height;
+    int channels;
+    unsigned char* data;
+} Image;
+
+    Image* input_img = load_image(filename);
+    if (input_img == NULL) {    
+    printf("Erreur : impossible de charger l'image %s\n", filename);
+    return; 
+    }     // Calculer les nouvelles dimensions
+    int new_width = (int)(input_img->width * scale);
+    int new_height = (int)(input_img->height * scale);
+    printf("Redimensionnement de %dx%d vers %dx%d (facteur: %.2f)\n",
+    input_img->width, input_img->height, new_width, new_height, scale);     // Créer l'image de sortie
+    Image* output_img = malloc(sizeof(Image));
+    output_img->width = new_width;
+    output_img->height = new_height;
+    output_img->channels = input_img->channels;
+    output_img->data = malloc(new_width * new_height * output_img->channels);    // Algorithme du plus proche voisin
+    for (int y = 0; y < new_height; y++) {
+        for (int x = 0; x < new_width; x++) {             // Calculer les coordonnées correspondantes dans l'image source
+            int src_x = (int)(x / scale);
+            int src_y = (int)(y / scale);             // S'assurer que les coordonnées sont dans les limites
+            if (src_x >= input_img->width) src_x = input_img->width - 1;
+                if (src_y >= input_img->height) src_y = input_img->height - 1;             // Copier les valeurs des pixels
+                    for (int c = 0; c < output_img->channels; c++) {
+                        int src_index = (src_y * input_img->width + src_x) * input_img->channels + c;
+                        int dst_index = (y * new_width + x) * output_img->channels + c;
+                        output_img->data[dst_index] = input_img->data[src_index];
+                        }
+                        }
+                        }     // Sauvegarder l'image de sortie
+    save_image_bmp("image_out.bmp", output_img);
+    printf("Image sauvegardée sous : image_out.bmp\n");     // Libérer la mémoire
+    free_image(input_img);
+    free_image(output_img);
+    } // Fonction pour charger une image (format basique)

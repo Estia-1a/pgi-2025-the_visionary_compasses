@@ -222,7 +222,13 @@ if (strncmp(configuration.command, "scale_crop", 10) == 0) {
     
     scale_crop(configuration.filenames[0], center_x, center_y, crop_width, crop_height);
 }
+if (strncmp(configuration.command, "scale_nearest", 13) == 0) {         // Récupérer le facteur d'échelle depuis les arguments
+float scale = atof(configuration.arguments[0]); // ou depuis où vous stockez les paramètres
+scale_nearest(configuration.filenames[0], scale);
 }
+return 0;
+}
+
 
 
 

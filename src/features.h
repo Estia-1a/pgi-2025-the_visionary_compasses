@@ -29,4 +29,5 @@ void stat_report(char *source_path);
 void scale_nearest (const char* source_path, float scale);
 void scale_bilinear(const char* source_path, float scale);
 void scale_crop(const char* source_path, int center_x, int center_y, int crop_width, int crop_height);
+void scale_nearest(const char* filename, float scale);
 #endif
