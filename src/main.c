@@ -195,6 +195,11 @@ if (strncmp(configuration.command, "scale_bilinear", 14) == 0) {
     scale_bilinear(configuration.filenames[0], scale_factor);
 }
 if (strncmp(configuration.command, "scale_crop", 10) == 0) {
+
+    printf("Debug: Nombre d'arguments disponibles:\n");
+    for (int i = 0; i < 10 && configuration.arguments[i] != NULL; i++) {
+        printf("  args[%d] = '%s'\n", i, configuration.arguments[i]);
+    }
     
     if (configuration.arguments[0] == NULL || configuration.arguments[1] == NULL || 
         configuration.arguments[2] == NULL || configuration.arguments[3] == NULL) {
@@ -203,19 +208,18 @@ if (strncmp(configuration.command, "scale_crop", 10) == 0) {
         return 1;
     }
     
-
     int center_x = atoi(configuration.arguments[0]);
     int center_y = atoi(configuration.arguments[1]);
     int crop_width = atoi(configuration.arguments[2]);
     int crop_height = atoi(configuration.arguments[3]);
     
-  
+    
     if (crop_width <= 0 || crop_height <= 0) {
         printf("Erreur: La largeur et la hauteur doivent être positives\n");
         printf("Reçu: largeur=%d, hauteur=%d\n", crop_width, crop_height);
         return 1;
     }
-
+    
     scale_crop(configuration.filenames[0], center_x, center_y, crop_width, crop_height);
 }
 }

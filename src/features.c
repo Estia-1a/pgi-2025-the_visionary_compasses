@@ -1047,69 +1047,66 @@ void scale_crop(const char* source_path, int center_x, int center_y, int crop_wi
     unsigned char *data = NULL;
     unsigned char *output_data = NULL;
 
-    // Charger l'image d'entrée
-    if (read_image_data(source_path, &data, &width, &height, &channels)) {
-        printf("Image originale : %d x %d\n", width, height);
-        printf("Centre de crop : (%d, %d)\n", center_x, center_y);
-        printf("Taille du crop : %d x %d\n", crop_width, crop_height);
+    printf("=== DEBUG scale_crop ===\n");
+    printf("Paramètres reçus: center=(%d,%d), taille=%dx%d\n", center_x, center_y, crop_width, crop_height);
 
-       
-        output_data = (unsigned char*)malloc(crop_width * crop_height * channels);
-        if (!output_data) {
-            printf("Erreur : échec d'allocation mémoire pour l'image de sortie.\n");
-            free(data);
-            return;
-        }
+    if (!read_image_data(source_path, &data, &width, &height, &channels)) {
+        printf("Erreur : Impossible de lire l'image %s\n", source_path);
+        return;
+    }
 
-        
-        int start_x = center_x - crop_width / 2;
-        int start_y = center_y - crop_height / 2;
+    printf("Image originale : %d x %d, channels=%d\n", width, height, channels);
+    if (crop_width <= 0 || crop_height <= 0) {
+        printf("Erreur: Dimensions invalides: %dx%d\n", crop_width, crop_height);
+        free(data);
+        return;
+    }
 
-        printf("Coin supérieur gauche du crop : (%d, %d)\n", start_x, start_y);
+    int output_size = crop_width * crop_height * channels;
+    output_data = (unsigned char*)calloc(output_size, sizeof(unsigned char));
+    if (!output_data) {
+        printf("Erreur : échec d'allocation mémoire (%d bytes)\n", output_size);
+        free(data);
+        return;
+    }
+    int start_x = center_x - crop_width / 2;
+    int start_y = center_y - crop_height / 2;
 
-        
-        for (int y = 0; y < crop_height; y++) {
-            for (int x = 0; x < crop_width; x++) {
-                // Calculer les coordonnées dans l'image source
-                int src_x = start_x + x;
-                int src_y = start_y + y;
+    printf("Coin supérieur gauche du crop : (%d, %d)\n", start_x, start_y);
+    printf("Coin inférieur droit du crop : (%d, %d)\n", start_x + crop_width - 1, start_y + crop_height - 1);
+
+    
+    for (int y = 0; y < crop_height; y++) {
+        for (int x = 0; x < crop_width; x++) {
+          
+            int src_x = start_x + x;
+            int src_y = start_y + y;
+            
+            
+            int dst_index = (y * crop_width + x) * channels;
+            
+            
+            if (src_x >= 0 && src_x < width && src_y >= 0 && src_y < height) {
                 
-                struct pixelRGB *dst_pixel = get_pixel(output_data, crop_width, crop_height, channels, x, y);
+                int src_index = (src_y * width + src_x) * channels;
                 
-                if (dst_pixel) {
-                    
-                    if (src_x >= 0 && src_x < width && src_y >= 0 && src_y < height) {
-                       
-                        struct pixelRGB *src_pixel = get_pixel(data, width, height, channels, src_x, src_y);
-                        if (src_pixel) {
-                            dst_pixel->R = src_pixel->R;
-                            dst_pixel->G = src_pixel->G;
-                            dst_pixel->B = src_pixel->B;
-                        } else {
-                   
-                            dst_pixel->R = 0;
-                            dst_pixel->G = 0;
-                            dst_pixel->B = 0;
-                        }
-                    } else {
-                      
-                        dst_pixel->R = 0;
-                        dst_pixel->G = 0;
-                        dst_pixel->B = 0;
-                    }
-                }
+                output_data[dst_index] = data[src_index];         // R
+                output_data[dst_index + 1] = data[src_index + 1]; // G
+                output_data[dst_index + 2] = data[src_index + 2]; // B
+            } else {
+               
+                output_data[dst_index] = 0;     // R
+                output_data[dst_index + 1] = 0; // G  
+                output_data[dst_index + 2] = 0; // B
             }
         }
-
-    
-        write_image_data("image_out.bmp", output_data, crop_width, crop_height);
-        
-        printf("Crop terminé. Image sauvegardée : image_out.bmp (%d x %d)\n", crop_width, crop_height);
-
-    
-        free(data);
-        free(output_data);
-    } else {
-        printf("Erreur : Impossible de lire l'image %s\n", source_path);
     }
+    if (write_image_data("image_out.bmp", output_data, crop_width, crop_height)) {
+        printf("Crop terminé. Image sauvegardée : image_out.bmp (%d x %d)\n", crop_width, crop_height);
+    } else {
+        printf("Erreur lors de la sauvegarde de l'image\n");
+    }
+
+    free(data);
+    free(output_data);
 }
