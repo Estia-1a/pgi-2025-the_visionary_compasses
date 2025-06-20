@@ -1,0 +1,66 @@
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c: In function ‘main’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:159:68: warning: passing argument 2 of ‘print_pixel’ makes integer from pointer without a cast [-Wint-conversion]
+  159 |     print_pixel(configuration.filenames[0], configuration.filenames[0], configuration.filenames[0]);
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+      |                                                                    |
+      |                                                                    char *
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:11:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.h:20:38: note: expected ‘int’ but argument is of type ‘char *’
+   20 | void print_pixel(char *filename, int x, int y);
+      |                                  ~~~~^
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:159:96: warning: passing argument 3 of ‘print_pixel’ makes integer from pointer without a cast [-Wint-conversion]
+  159 |     print_pixel(configuration.filenames[0], configuration.filenames[0], configuration.filenames[0]);
+      |                                                                         ~~~~~~~~~~~~~~~~~~~~~~~^~~
+      |                                                                                                |
+      |                                                                                                char *
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/utils.h:20:45: note: expected ‘int’ but argument is of type ‘char *’
+   20 | void print_pixel(char *filename, int x, int y);
+      |                                         ~~~~^
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c: In function ‘scale_nearest’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1194:24: warning: initialization of ‘Image *’ from incompatible pointer type ‘Image *’ [-Wincompatible-pointer-types]
+ 1194 |     Image* input_img = load_image(filename);
+      |                        ^~~~~~~~~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1221:37: warning: passing argument 2 of ‘save_image_bmp’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 1221 |     save_image_bmp("image_out.bmp", output_img);
+      |                                     ^~~~~~~~~~
+      |                                     |
+      |                                     Image *
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1125:50: note: expected ‘Image *’ but argument is of type ‘Image *’
+ 1125 | void save_image_bmp(const char* filename, Image* img) {
+      |                                           ~~~~~~~^~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1223:16: warning: passing argument 1 of ‘free_image’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 1223 |     free_image(input_img);
+      |                ^~~~~~~~~
+      |                |
+      |                Image *
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1178:24: note: expected ‘Image *’ but argument is of type ‘Image *’
+ 1178 | void free_image(Image* img) {
+      |                 ~~~~~~~^~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1224:16: warning: passing argument 1 of ‘free_image’ from incompatible pointer type [-Wincompatible-pointer-types]
+ 1224 |     free_image(output_img);
+      |                ^~~~~~~~~~
+      |                |
+      |                Image *
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1178:24: note: expected ‘Image *’ but argument is of type ‘Image *’
+ 1178 | void free_image(Image* img) {
+      |                 ~~~~~~~^~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c: In function ‘load_image’:
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1072:5: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+ 1072 |     fread(&file_header, sizeof(BITMAPFILEHEADER), 1, file);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1081:5: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+ 1081 |     fread(&info_header, sizeof(BITMAPINFOHEADER), 1, file);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/features.c:1108:13: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+ 1108 |             fread(&data[index], 1, channels, file); // BGR
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:2:
+In function ‘atoi’,
+    inlined from ‘main’ at /home/runner/work/pgi-2025-the_visionary_compasses/pgi-2025-the_visionary_compasses/src/main.c:56:13:
+/usr/include/stdlib.h:483:16: warning: argument 1 null where non-null expected [-Wnonnull]
+  483 |   return (int) strtol (__nptr, (char **) NULL, 10);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/stdlib.h: In function ‘main’:
+/usr/include/stdlib.h:177:17: note: in a call to function ‘strtol’ declared ‘nonnull’
+  177 | extern long int strtol (const char *__restrict __nptr,
+      |                 ^~~~~~
